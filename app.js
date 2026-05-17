@@ -300,8 +300,8 @@ function calculateAge(value) {
 
 function tierForAge(age) {
   if (age === null || age < 0) return null;
-  if (age < 16) return { name: "Junior Básica", limit: "500 Pz saldo / 50 Pz diarios", welcome: "Bono inicial 500 Pz" };
-  if (age < 18) return { name: "Junior Senior", limit: "1.000 Pz saldo / 100 Pz diarios", welcome: "Bono inicial 500 Pz" };
+  if (age < 16) return { name: "Junior Básica", limit: "500 Pz saldo / 50 Pz diarios", welcome: "Bono inicial 500 Pz", guardian: true };
+  if (age < 18) return { name: "Junior Senior", limit: "1.000 Pz saldo / 100 Pz diarios", welcome: "Bono inicial 500 Pz", guardian: true };
   return { name: "Ciudadanía Plena", limit: "Funciones completas ordinarias", welcome: "Alta sin bono junior" };
 }
 
@@ -310,8 +310,23 @@ function updateAgeResult() {
   const age = calculateAge($("#birthDate").value);
   const tier = tierForAge(age);
   $("#ageResult").innerHTML = tier
-    ? `<strong>${tier.name}</strong><br>Edad verificada: ${age} años · ${tier.limit} · ${tier.welcome}`
+    ? `<strong>${tier.name}</strong><br>Edad verificada: ${age} años · ${tier.limit} · ${tier.welcome}${tier.guardian ? "<br>Alta infantil: requiere gestión con tutores legales. Plataforma opcional de controles parentales disponible para límites, seguimiento y autorizaciones." : ""}`
     : "Introduce tu fecha de nacimiento para calcular el rango.";
+}
+
+function authAppListMarkup() {
+  return `
+    <div class="auth-app-list">
+      <strong>Apps compatibles</strong>
+      <span>Google Authenticator</span>
+      <span>Microsoft Authenticator</span>
+      <span>2FAS</span>
+      <span>Authy</span>
+      <span>Aegis Authenticator</span>
+      <span>Bitwarden Authenticator</span>
+      <span>1Password</span>
+    </div>
+  `;
 }
 
 function resetWizard() {
@@ -322,7 +337,8 @@ function resetWizard() {
   $("#totpSetup").innerHTML = `
     <span>PlacetaID pendiente</span>
     <h3>Crearemos tu identidad al continuar</h3>
-    <p>Después tendrás que escanear el QR con Google Authenticator, Microsoft Authenticator, 2FAS o una app compatible.</p>
+    <p>Después tendrás que escanear el QR con una app autenticadora compatible.</p>
+    ${authAppListMarkup()}
   `;
   $("#totpVerifier").hidden = true;
   $("#certificatePreview").hidden = true;
@@ -416,7 +432,7 @@ async function registerInPlacetaId() {
         <div>
           <span>PlacetaID creado</span>
           <h3>${data.dip}</h3>
-          <p>Escanea este QR en tu app de autenticación y escribe el primer código de 6 dígitos para activar el acceso.</p>
+          <p>Escanea este QR en Google Authenticator, Microsoft Authenticator, 2FAS, Authy, Aegis, Bitwarden Authenticator, 1Password o cualquier app compatible con códigos TOTP. Escribe el primer código de 6 dígitos para activar el acceso.</p>
           <div class="totp-secret">Secreto manual: ${data.totpSecret}</div>
         </div>
       </div>
@@ -477,6 +493,8 @@ function generateCertificate() {
     proyecto: $("#initialProject").value,
     consentimiento_rgpd: true,
     simulacion_aceptada: true,
+    gestion_tutores_legales: Boolean(tier.guardian),
+    controles_parentales_opcionales: Boolean(tier.guardian),
     creadoEn: createdAt,
     origen: "Web GDLP"
   };
@@ -486,6 +504,7 @@ function generateCertificate() {
     <h3>${payload.nombreRol}</h3>
     <p><strong>${dip}</strong> · ${tier.name} · ${age} años</p>
     <p>Proyecto inicial: ${payload.proyecto}</p>
+    ${tier.guardian ? "<p>Alta infantil gestionada con tutores legales. Puede vincularse opcionalmente a la plataforma de controles parentales.</p>" : ""}
     <p>Alta generada: ${createdAt}</p>
     <p>PlacetaID activado con autenticador 2FA. Registro de consentimiento: simulación lúdica aceptada y consentimiento RGPD activo.</p>
   `;

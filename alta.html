@@ -6,6 +6,8 @@
   <title>Alta | Grupo de La Placeta</title>
   <meta name="description" content="Alta en el ecosistema del Grupo de La Placeta mediante PlacetaID y autenticador.">
   <meta name="theme-color" content="#3F00D8">
+  <link rel="canonical" href="https://www.laplaceta.org/alta">
+  <meta property="og:url" content="https://www.laplaceta.org/alta">
   <link rel="icon" href="./assets/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,7 +35,7 @@
       <section class="page-hero">
         <p class="eyebrow">Inscripción</p>
         <h1>Alta en el ecosistema</h1>
-        <p>Completa el registro, acepta el aviso de rol y activa PlacetaID escaneando el QR del autenticador.</p>
+        <p>Completa el registro, acepta el aviso de rol y activa PlacetaID escaneando el QR con una app autenticadora compatible. Las altas infantiles se gestionan con sus tutores legales.</p>
       </section>
 
       <section class="content-layout wizard" id="onboardingForm">
@@ -53,6 +55,10 @@
             <label>Proyecto inicial<select id="initialProject"><option>Participante individual</option><option>Empresa de rol</option><option>Asociación colaboradora</option><option>Voluntariado institucional</option></select></label>
           </div>
           <div class="age-result" id="ageResult">Introduce tu fecha de nacimiento para calcular el rango.</div>
+          <div class="consent-box">
+            <strong>Altas infantiles y tutores</strong>
+            <p>Las cuentas de menores se tramitan con intervención de sus tutores legales. Opcionalmente se puede activar una plataforma de gestión de controles parentales para límites, seguimiento y autorizaciones.</p>
+          </div>
         </section>
         <section class="wizard-page" data-step="2">
           <div class="consent-box">
@@ -74,7 +80,17 @@
           <div class="totp-setup" id="totpSetup">
             <span>PlacetaID pendiente</span>
             <h3>Crearemos tu identidad al continuar</h3>
-            <p>Después tendrás que escanear el QR con Google Authenticator, Microsoft Authenticator, 2FAS o una app compatible.</p>
+            <p>Después tendrás que escanear el QR con una app autenticadora compatible.</p>
+            <div class="auth-app-list">
+              <strong>Apps compatibles</strong>
+              <span>Google Authenticator</span>
+              <span>Microsoft Authenticator</span>
+              <span>2FAS</span>
+              <span>Authy</span>
+              <span>Aegis Authenticator</span>
+              <span>Bitwarden Authenticator</span>
+              <span>1Password</span>
+            </div>
           </div>
           <div class="form-grid totp-verifier" id="totpVerifier" hidden>
             <label>Código del autenticador<input id="totpCode" inputmode="numeric" maxlength="7" placeholder="000 000"></label>

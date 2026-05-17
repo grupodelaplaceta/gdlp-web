@@ -9,6 +9,8 @@
   <meta property="og:title" content="Grupo de La Placeta">
   <meta property="og:description" content="Asociación y ecosistema virtual de rol cooperativo, inclusivo y sin dinero real.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.laplaceta.org/">
+  <link rel="canonical" href="https://www.laplaceta.org/">
   <link rel="icon" href="./assets/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -150,7 +152,17 @@
         <div class="totp-setup" id="totpSetup">
           <span>PlacetaID pendiente</span>
           <h3>Crearemos tu identidad al continuar</h3>
-          <p>Después tendrás que escanear el QR con Google Authenticator, Microsoft Authenticator, 2FAS o una app compatible.</p>
+          <p>Después tendrás que escanear el QR con una app autenticadora compatible.</p>
+          <div class="auth-app-list">
+            <strong>Apps compatibles</strong>
+            <span>Google Authenticator</span>
+            <span>Microsoft Authenticator</span>
+            <span>2FAS</span>
+            <span>Authy</span>
+            <span>Aegis Authenticator</span>
+            <span>Bitwarden Authenticator</span>
+            <span>1Password</span>
+          </div>
         </div>
         <div class="form-grid totp-verifier" id="totpVerifier" hidden>
           <label>Código del autenticador<input id="totpCode" inputmode="numeric" maxlength="7" placeholder="000 000"></label>
