@@ -1,10 +1,10 @@
 const organizations = [
-  { type: "publica", name: "Ayuntamiento de La Placeta", id: "PUB-AYTO", status: "Activo", text: "Gestión municipal de rol, permisos de actividad y expedientes comunitarios.", meta: ["Gobierno", "Expedientes", "Comunidad"] },
-  { type: "publica", name: "Tesoro Central", id: "TGLP-001", status: "Operativo", text: "Entidad de masa monetaria simulada, emisión interna, tasas y control macroeconómico.", meta: ["Tesoro", "Normativa", "Pz"] },
-  { type: "publica", name: "Agencia Tributaria", id: "ATP-001", status: "Auditando", text: "Supervisión fiscal del rol, IVA simulado, IRM y expedientes de trazabilidad.", meta: ["Tributos", "IVA", "Auditoría"] },
-  { type: "empresa", name: "La Cafetería", id: "EMP-0014", status: "SDK pagos", text: "Comercio interno conectado al módulo de pagos del Banco de La Placeta.", meta: ["Empresa", "TPV", "IVA"] },
-  { type: "empresa", name: "Placeta Studio", id: "EMP-0021", status: "Alta validada", text: "Proyecto creativo de miembros para contenidos, diseño y servicios del ecosistema.", meta: ["Servicios", "Contratos", "SMI"] },
-  { type: "asociacion", name: "Red Comunitaria Placeta", id: "ASC-0007", status: "Proyecto aprobado", text: "Entidad colaboradora sin ánimo de lucro para actividades, ayudas y eventos.", meta: ["Voluntariado", "Eventos", "Junta"] }
+  { type: "publica", name: "Ayuntamiento de La Placeta", id: "PUB-AYTO", status: "Activo", text: "Gestión municipal, permisos y expedientes.", meta: ["Gobierno", "Expedientes", "Comunidad"] },
+  { type: "publica", name: "Tesoro Central", id: "TGLP-001", status: "Operativo", text: "Emisión interna, tasas y control simulado.", meta: ["Tesoro", "Normativa", "Pz"] },
+  { type: "publica", name: "Agencia Tributaria", id: "ATP-001", status: "Auditando", text: "IVA simulado, IRM y trazabilidad.", meta: ["Tributos", "IVA", "Auditoría"] },
+  { type: "empresa", name: "La Cafetería", id: "EMP-0014", status: "SDK pagos", text: "Comercio interno conectado al banco.", meta: ["Empresa", "TPV", "IVA"] },
+  { type: "empresa", name: "Placeta Studio", id: "EMP-0021", status: "Alta validada", text: "Contenidos, diseño y servicios internos.", meta: ["Servicios", "Contratos", "SMI"] },
+  { type: "asociacion", name: "Red Comunitaria Placeta", id: "ASC-0007", status: "Proyecto aprobado", text: "Actividades, ayudas y eventos.", meta: ["Voluntariado", "Eventos", "Junta"] }
 ];
 
 const planProjects = [
@@ -12,35 +12,35 @@ const planProjects = [
     id: "infraestructura-core",
     title: "Infraestructura Core",
     tag: "MongoDB & APIs",
-    text: "Apagón progresivo de sistemas manuales y consolidación de PlacetaID, API Gateway y estado centralizado.",
+    text: "PlacetaID, API Gateway y estado centralizado.",
     status: "Primer semestre"
   },
   {
     id: "gobernanza-economica",
     title: "Gobernanza económica",
     tag: "Fiscalidad automática",
-    text: "IVA, tasas, IRM y alertas de acumulación calculadas por backend y revisables desde paneles autorizados.",
+    text: "IVA, tasas, IRM y alertas automáticas.",
     status: "En diseño"
   },
   {
     id: "sdk-comercial",
     title: "SDK comercial",
     tag: "Pagos y webhooks",
-    text: "Checkout seguro para empresas internas, enlaces de cobro de un solo uso y eventos en tiempo real.",
+    text: "Checkout, enlaces de cobro y eventos.",
     status: "Piloto técnico"
   },
   {
     id: "mercado-regulado",
     title: "Mercado regulado",
     tag: "Inversiones +18",
-    text: "Operaciones asíncronas, control de edad, límites por riesgo y retención fiscal automática sobre beneficio.",
+    text: "Operaciones con edad, límites y fiscalidad.",
     status: "Marco normativo"
   },
   {
     id: "seguridad-privacidad",
     title: "Seguridad y privacidad",
     tag: "RGPD / LOPDGDD",
-    text: "Security logs, trazabilidad de cambios y baja con anonimización contable para proteger el ecosistema.",
+    text: "Logs, trazabilidad y baja con anonimización.",
     status: "Prioridad 2026"
   }
 ];
@@ -50,7 +50,7 @@ const defaultNews = [
     id: "apertura-portal-institucional",
     title: "Apertura del portal institucional",
     tag: "Comunicado",
-    text: "El Grupo de La Placeta estrena portal central para altas, normativa, noticias y mapa del ecosistema.",
+    text: "Nuevo portal para altas, normativa, noticias y ecosistema.",
     date: "17/05/2026",
     image: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=80",
     video: "https://www.youtube.com/embed/dQw4w9WgXcQ"
@@ -59,7 +59,7 @@ const defaultNews = [
     id: "guia-altas-consentimiento",
     title: "Guía de altas y consentimiento",
     tag: "Ayuda",
-    text: "Toda nueva incorporación debe aceptar el aviso de simulación y el consentimiento RGPD antes de recibir DIP.",
+    text: "Alta con aviso de rol, RGPD y DIP.",
     date: "17/05/2026",
     image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=900&q=80"
   },
@@ -67,7 +67,7 @@ const defaultNews = [
     id: "empresas-internas-sdk-pagos",
     title: "Empresas internas y SDK de pagos",
     tag: "Ecosistema",
-    text: "Las empresas de rol pueden solicitar conexión al módulo de pagos del Banco con IVA simulado por defecto.",
+    text: "Conexión al banco e IVA simulado.",
     date: "17/05/2026",
     image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=80"
   },
@@ -75,7 +75,7 @@ const defaultNews = [
     id: "portal-miembro-placetaid",
     title: "PlacetaID como acceso común",
     tag: "Comunicado",
-    text: "El acceso al ecosistema se unifica mediante DIP, contraseña y autenticador para proteger la identidad interna.",
+    text: "DIP, contraseña y autenticador.",
     date: "17/05/2026",
     image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80"
   },
@@ -83,7 +83,7 @@ const defaultNews = [
     id: "archivo-institucional-documentos",
     title: "Archivo institucional y documentos",
     tag: "Normativa",
-    text: "La sección de gobernanza reúne estatutos, normativa y documentación pública del Grupo de La Placeta.",
+    text: "Estatutos, normativa y documentos públicos.",
     date: "17/05/2026",
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=900&q=80"
   }
@@ -407,6 +407,61 @@ function setupTheme() {
     $(".shell").dataset.theme = next;
     document.documentElement.dataset.theme = next;
     localStorage.setItem("gdlp-theme", next);
+  });
+}
+
+function setupMobileDrawer() {
+  const topbar = $(".topbar");
+  const nav = $(".desktop-nav");
+  const actions = $(".top-actions");
+  if (!topbar || !nav || !actions || $(".mobile-drawer")) return;
+
+  const toggle = document.createElement("button");
+  toggle.className = "icon-btn mobile-menu-toggle";
+  toggle.type = "button";
+  toggle.setAttribute("aria-label", "Abrir menú");
+  toggle.setAttribute("aria-expanded", "false");
+  toggle.innerHTML = "<span></span><span></span><span></span>";
+  actions.appendChild(toggle);
+
+  const overlay = document.createElement("button");
+  overlay.className = "drawer-overlay";
+  overlay.type = "button";
+  overlay.setAttribute("aria-label", "Cerrar menú");
+
+  const drawer = document.createElement("aside");
+  drawer.className = "mobile-drawer";
+  drawer.setAttribute("aria-label", "Menú principal");
+  drawer.innerHTML = `
+    <div class="drawer-head">
+      <img src="./assets/logo.png" alt="">
+      <button class="icon-btn drawer-close" type="button" aria-label="Cerrar menú">×</button>
+    </div>
+    <nav></nav>
+    <a class="primary drawer-cta" href="./alta.html">Alta</a>
+  `;
+
+  const drawerNav = drawer.querySelector("nav");
+  nav.querySelectorAll("a").forEach((link) => drawerNav.appendChild(link.cloneNode(true)));
+
+  document.body.append(overlay, drawer);
+
+  function closeDrawer() {
+    document.body.classList.remove("drawer-open");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+
+  function openDrawer() {
+    document.body.classList.add("drawer-open");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  toggle.addEventListener("click", () => document.body.classList.contains("drawer-open") ? closeDrawer() : openDrawer());
+  overlay.addEventListener("click", closeDrawer);
+  drawer.querySelector(".drawer-close")?.addEventListener("click", closeDrawer);
+  drawer.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeDrawer));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeDrawer();
   });
 }
 
@@ -811,6 +866,7 @@ function generateDocCover(kind) {
 
 document.addEventListener("DOMContentLoaded", () => {
   setupTheme();
+  setupMobileDrawer();
   renderOrganizations("publica");
   renderPlanProjects();
   renderNews();
