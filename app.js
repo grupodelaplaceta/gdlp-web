@@ -90,6 +90,7 @@ const defaultNews = [
 ];
 
 const PLACETAID_API_BASE = "https://id.laplaceta.org";
+const BANCO_GDLP_NEWS_API = "https://banco.laplaceta.org/api/gdlp-news";
 let wizardStep = 1;
 let captchaTotal = 0;
 let currentRegistration = null;
@@ -106,6 +107,27 @@ function loadNews() {
 
 function saveNews(items) {
   localStorage.setItem("gdlp-news", JSON.stringify(items));
+}
+
+async function syncBackendNews() {
+  try {
+    const response = await fetch(BANCO_GDLP_NEWS_API, { cache: "no-store" });
+    const payload = await response.json();
+    if (!response.ok || !Array.isArray(payload.news) || !payload.news.length) return;
+    const local = loadNews();
+    const byId = new Map();
+    [...payload.news, ...local].forEach((item) => byId.set(item.id || item.slug || slugify(item.title), {
+      ...item,
+      id: item.id || item.slug || slugify(item.title),
+      text: item.text || item.summary || "",
+      video: item.video || item.videoUrl || ""
+    }));
+    saveNews([...byId.values()].slice(0, 24));
+    renderNews();
+    refreshBankExport();
+  } catch {
+    // La web sigue funcionando en localStorage si el backend no responde.
+  }
 }
 
 function escapeHtml(value = "") {
@@ -654,8 +676,25 @@ function refreshBankExport(items = loadNews()) {
   output.value = JSON.stringify(shared, null, 2);
 }
 
-function publishPost() {
+async function publishSharedToBank(items, key) {
+  const shared = bankSharedItems(items);
+  if (!shared.length) return { ok: true, skipped: true };
+  const response = await fetch(BANCO_GDLP_NEWS_API, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "x-gdlp-admin-key": key
+    },
+    body: JSON.stringify({ news: shared })
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload.error || "No se pudo publicar en Banco de La Placeta");
+  return payload;
+}
+
+async function publishPost() {
   if ($("#adminKey").value !== "gdlp-admin") return adminMessage("Clave incorrecta. Demo local: gdlp-admin");
+  const key = $("#adminKey").value;
   const title = $("#postTitle").value.trim();
   const html = sanitizeRichHtml($("#postEditor")?.innerHTML || "");
   const text = plainTextFromHtml(html).slice(0, 220);
@@ -690,7 +729,16 @@ function publishPost() {
   if ($("#shareWithBank")) $("#shareWithBank").checked = false;
   renderNews();
   refreshBankExport(nextNews);
-  adminMessage(shareWithBank ? "Noticia publicada y marcada para Banco de La Placeta." : "Noticia publicada en portada.");
+  if (shareWithBank) {
+    try {
+      await publishSharedToBank(nextNews, key);
+      adminMessage("Noticia publicada y sincronizada con Banco de La Placeta.");
+    } catch (error) {
+      adminMessage(`${error instanceof Error ? error.message : "No se pudo sincronizar con Banco"}. Queda en el paquete exportable.`);
+    }
+  } else {
+    adminMessage("Noticia publicada en portada.");
+  }
 }
 
 function adminMessage(text) {
@@ -772,6 +820,7 @@ document.addEventListener("DOMContentLoaded", () => {
   makeCaptcha();
   setupRichEditor();
   refreshBankExport();
+  syncBackendNews();
 
   $$("[data-open]").forEach((button) => button.addEventListener("click", () => openModal(button.dataset.open)));
   $$("[data-doc]").forEach((button) => button.addEventListener("click", () => generateDocCover(button.dataset.doc)));
