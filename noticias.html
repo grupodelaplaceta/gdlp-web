@@ -15,7 +15,7 @@
 <body>
   <div class="shell" data-theme="light">
     <header class="topbar">
-      <a class="brand" href="./index.html"><img src="./assets/logo.png" alt=""><span><strong>Grupo de La Placeta</strong><small>Noticias oficiales</small></span></a>
+      <a class="brand" href="./index.html"><img src="./assets/logo.png" alt=""></a>
       <nav class="desktop-nav"><a href="./index.html">Inicio</a><a href="./plan-2026.html">Plan 2026</a><a href="./ecosistema.html">Ecosistema</a><a href="./gobernanza.html">Gobernanza</a></nav>
       <div class="top-actions"><button class="icon-btn" id="themeToggle" type="button">◐</button><button class="primary small" data-open="adminModal" type="button">Publicar</button></div>
     </header>
@@ -38,10 +38,29 @@
       <div class="modal-head"><p class="eyebrow">Admin publicaciones</p><h2>Panel de noticias</h2><p>Publica comunicados institucionales.</p></div>
       <label>Clave admin local<input id="adminKey" type="password" placeholder="gdlp-admin"></label>
       <div class="form-grid"><label>Título<input id="postTitle"></label><label>Categoría<select id="postTag"><option>Comunicado</option><option>Ayuda</option><option>Normativa</option><option>Ecosistema</option></select></label></div>
-      <div class="form-grid"><label>Imagen de portada<input id="postImage" placeholder="https://..."></label><label>Vídeo opcional<input id="postVideo" placeholder="https://www.youtube.com/watch?v=..."></label></div>
-      <label>Texto<textarea id="postText" rows="5"></textarea></label>
+      <div class="form-grid"><label>Imagen de portada<input id="postImage" placeholder="https://..."></label><label>Vídeo principal<input id="postVideo" placeholder="https://www.youtube.com/watch?v=..."></label></div>
+      <label>Galería de imágenes<textarea id="postImages" rows="3" placeholder="Una URL de imagen por línea"></textarea></label>
+      <label>Más vídeos<textarea id="postVideos" rows="3" placeholder="YouTube, Vimeo o mp4. Un enlace por línea"></textarea></label>
+      <div class="editor-toolbar" aria-label="Formato de noticia">
+        <button type="button" data-rich="bold"><strong>B</strong></button>
+        <button type="button" data-rich="italic"><em>I</em></button>
+        <button type="button" data-rich="insertUnorderedList">Lista</button>
+        <button type="button" data-rich-block="h2">H2</button>
+        <button type="button" data-rich-block="blockquote">Cita</button>
+        <button type="button" data-rich-link>Enlace</button>
+      </div>
+      <label>Contenido enriquecido
+        <div id="postEditor" class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Redacta la noticia con subtítulos, enlaces, listas y citas..."></div>
+      </label>
+      <label class="check bank-share-check"><input id="shareWithBank" type="checkbox"><span>Compartir también en la web del Banco de La Placeta</span></label>
       <button class="primary" id="publishPost" type="button">Publicar</button>
       <div class="admin-output" id="adminOutput"></div>
+      <div class="bank-export" id="bankExport" hidden>
+        <strong>Paquete para banco-web</strong>
+        <p>Copia este bloque en el feed compartido o úsalo como payload de importación cuando conectes backend.</p>
+        <textarea id="bankExportText" rows="8" readonly></textarea>
+        <button class="secondary" id="copyBankExport" type="button">Copiar paquete Banco</button>
+      </div>
     </form>
   </dialog>
   <script src="./app.js"></script>

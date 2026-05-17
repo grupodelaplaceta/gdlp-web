@@ -108,6 +108,59 @@ function saveNews(items) {
   localStorage.setItem("gdlp-news", JSON.stringify(items));
 }
 
+function escapeHtml(value = "") {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function plainTextFromHtml(html = "") {
+  const div = document.createElement("div");
+  div.innerHTML = html;
+  return div.textContent?.replace(/\s+/g, " ").trim() || "";
+}
+
+function sanitizeRichHtml(html = "") {
+  const template = document.createElement("template");
+  template.innerHTML = html;
+  const allowed = new Set(["P", "BR", "STRONG", "B", "EM", "I", "UL", "OL", "LI", "A", "H2", "H3", "BLOCKQUOTE"]);
+  template.content.querySelectorAll("*").forEach((node) => {
+    if (!allowed.has(node.tagName)) {
+      node.replaceWith(document.createTextNode(node.textContent || ""));
+      return;
+    }
+    [...node.attributes].forEach((attr) => {
+      const keepHref = node.tagName === "A" && attr.name === "href";
+      if (!keepHref) node.removeAttribute(attr.name);
+    });
+    if (node.tagName === "A") {
+      const href = node.getAttribute("href") || "";
+      if (!/^https?:\/\//i.test(href) && !href.startsWith("./") && !href.startsWith("/")) node.removeAttribute("href");
+      node.setAttribute("target", "_blank");
+      node.setAttribute("rel", "noreferrer");
+    }
+  });
+  return template.innerHTML.trim();
+}
+
+function lines(value = "") {
+  return String(value).split(/\r?\n/).map((item) => item.trim()).filter(Boolean);
+}
+
+function itemImages(item, seed = 0) {
+  const images = Array.isArray(item.images) ? item.images.filter(Boolean) : [];
+  return images.length ? images : [item.image || fallbackNewsImage(seed)];
+}
+
+function itemVideos(item) {
+  const videos = Array.isArray(item.videos) ? item.videos.filter(Boolean) : [];
+  if (item.video) videos.unshift(item.video);
+  return [...new Set(videos)];
+}
+
 function slugify(value) {
   return String(value || "")
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -161,16 +214,24 @@ function renderNews() {
   if (!grid) return;
   const [featured, ...rest] = news;
   if (featured && $("#featuredNews")) {
+    const featuredImages = itemImages(featured);
+    const featuredVideos = itemVideos(featured);
     $("#featuredNews").innerHTML = `
       <div class="featured-media">
-        <img src="${featured.image || fallbackNewsImage()}" alt="${featured.title}" loading="lazy">
-        ${featured.video ? `<span>Vídeo</span>` : ""}
+        <img src="${featuredImages[0]}" alt="${escapeHtml(featured.title)}" loading="lazy">
+        <div class="news-media-labels">
+          ${featuredImages.length > 1 ? `<span>${featuredImages.length} imágenes</span>` : ""}
+          ${featuredVideos.length ? `<span>${featuredVideos.length} vídeo${featuredVideos.length > 1 ? "s" : ""}</span>` : ""}
+        </div>
       </div>
-      <div>
-        <span class="news-tag">${featured.tag}</span>
-        <h3>${featured.title}</h3>
-        <p>${featured.text}</p>
-        <small>${featured.date}</small>
+      <div class="featured-copy">
+        <div class="news-meta-row">
+          <span class="news-tag">${escapeHtml(featured.tag)}</span>
+          <small>${escapeHtml(featured.date)}</small>
+          ${featured.shareWithBank ? `<small class="bank-shared">Banco</small>` : ""}
+        </div>
+        <h3>${escapeHtml(featured.title)}</h3>
+        <p>${escapeHtml(featured.text)}</p>
         <a class="card-link" href="./noticia.html?id=${featured.id || slugify(featured.title)}">Leer destacado</a>
       </div>
     `;
@@ -180,14 +241,25 @@ function renderNews() {
 
 function newsCard(item, seed = 0) {
   const id = item.id || slugify(item.title);
+  const images = itemImages(item, seed);
+  const videos = itemVideos(item);
   return `
     <article class="news-card">
-      <img src="${item.image || fallbackNewsImage(seed)}" alt="${item.title}" loading="lazy">
-      <span>${item.tag}</span>
-      <h3>${item.title}</h3>
-      <p>${item.text}</p>
-      <small>${item.date}</small>
-      <a class="card-link" href="./noticia.html?id=${id}">${item.video ? "Ver vídeo" : "Leer comunicado"}</a>
+      <a class="news-card-media" href="./noticia.html?id=${id}" aria-label="Abrir ${escapeHtml(item.title)}">
+        <img src="${images[0]}" alt="${escapeHtml(item.title)}" loading="lazy">
+        <span class="news-media-labels">
+          ${images.length > 1 ? `<small>${images.length} imágenes</small>` : ""}
+          ${videos.length ? `<small>${videos.length} vídeo${videos.length > 1 ? "s" : ""}</small>` : ""}
+        </span>
+      </a>
+      <div class="news-meta-row">
+        <span>${escapeHtml(item.tag)}</span>
+        <small>${escapeHtml(item.date)}</small>
+        ${item.shareWithBank ? `<small class="bank-shared">Banco</small>` : ""}
+      </div>
+      <h3>${escapeHtml(item.title)}</h3>
+      <p>${escapeHtml(item.text)}</p>
+      <a class="card-link" href="./noticia.html?id=${id}">${videos.length ? "Ver multimedia" : "Leer comunicado"}</a>
     </article>
   `;
 }
@@ -210,10 +282,23 @@ function toEmbedUrl(url = "") {
       return id ? `https://www.youtube.com/embed/${id}` : url;
     }
     if (parsed.hostname.includes("youtu.be")) return `https://www.youtube.com/embed/${parsed.pathname.replace("/", "")}`;
+    if (parsed.hostname.includes("vimeo.com")) {
+      const id = parsed.pathname.split("/").filter(Boolean).pop();
+      return id ? `https://player.vimeo.com/video/${id}` : url;
+    }
     return url;
   } catch {
     return url;
   }
+}
+
+function videoMarkup(url, title, index = 0) {
+  const embed = toEmbedUrl(url);
+  if (!embed) return "";
+  if (/\.(mp4|webm|ogg)(\?.*)?$/i.test(embed)) {
+    return `<video class="news-video" src="${embed}" controls preload="metadata"></video>`;
+  }
+  return `<div class="video-frame"><iframe src="${embed}" title="${escapeHtml(title)} vídeo ${index + 1}" allowfullscreen loading="lazy"></iframe></div>`;
 }
 
 function renderNewsDetailPage() {
@@ -222,17 +307,33 @@ function renderNewsDetailPage() {
   const id = new URLSearchParams(location.search).get("id") || "";
   const item = loadNews().find((entry) => (entry.id || slugify(entry.title)) === id) || loadNews()[0];
   if (!item) return;
-  const video = toEmbedUrl(item.video);
+  const images = itemImages(item);
+  const videos = itemVideos(item).filter(Boolean);
+  const bodyHtml = item.html ? sanitizeRichHtml(item.html) : `<p>${escapeHtml(item.text)}</p>`;
   document.title = `${item.title} | Grupo de La Placeta`;
   target.innerHTML = `
-    <div class="news-detail-media">
-      <img src="${item.image || fallbackNewsImage(0)}" alt="${item.title}">
-    </div>
-    <span class="news-tag">${item.tag}</span>
-    <h2>${item.title}</h2>
-    <p>${item.text}</p>
-    <small>${item.date}</small>
-    ${video ? `<div class="video-frame"><iframe src="${video}" title="${item.title}" allowfullscreen loading="lazy"></iframe></div>` : ""}
+    <header class="news-detail-hero">
+      <div class="news-detail-media">
+        <img src="${images[0]}" alt="${escapeHtml(item.title)}">
+        <div class="news-media-labels">
+          ${images.length > 1 ? `<span>${images.length} imágenes</span>` : ""}
+          ${videos.length ? `<span>${videos.length} vídeo${videos.length > 1 ? "s" : ""}</span>` : ""}
+        </div>
+      </div>
+      <div class="news-detail-heading">
+        <div class="news-meta-row">
+          <span class="news-tag">${escapeHtml(item.tag)}</span>
+          <small>${escapeHtml(item.date)}</small>
+          ${item.shareWithBank ? `<small class="bank-shared">Banco de La Placeta</small>` : ""}
+        </div>
+        <h1>${escapeHtml(item.title)}</h1>
+        <p>${escapeHtml(item.text)}</p>
+      </div>
+    </header>
+    <article class="rich-news-body">${bodyHtml}</article>
+    ${images.length > 1 ? `<div class="news-gallery">${images.slice(1).map((image, index) => `<img src="${image}" alt="${escapeHtml(item.title)} imagen ${index + 2}" loading="lazy">`).join("")}</div>` : ""}
+    ${videos.length ? `<div class="video-stack">${videos.map((video, index) => videoMarkup(video, item.title, index)).join("")}</div>` : ""}
+    ${item.shareWithBank ? `<p class="bank-shared-note">Esta noticia está marcada para compartirse también en la web del Banco de La Placeta.</p>` : ""}
     <div class="share-row"><button class="secondary" type="button" data-share>Compartir enlace</button><a class="ghost" href="./noticias.html">Volver a noticias</a></div>
   `;
   $("[data-share]")?.addEventListener("click", shareCurrentPage);
@@ -522,32 +623,108 @@ function memberDemo() {
   `;
 }
 
+function bankSharedItems(items = loadNews()) {
+  return items.filter((item) => item.shareWithBank).map((item) => ({
+    slug: item.id || slugify(item.title),
+    title: item.title,
+    tag: item.tag,
+    summary: item.text,
+    date: item.date,
+    image: itemImages(item)[0],
+    images: itemImages(item),
+    body: plainTextFromHtml(item.html || item.text).split(/(?<=[.!?])\s+/).filter(Boolean),
+    html: item.html || `<p>${escapeHtml(item.text)}</p>`,
+    videoUrl: itemVideos(item).map(toEmbedUrl).filter(Boolean)[0],
+    videos: itemVideos(item).map(toEmbedUrl).filter(Boolean),
+    source: "gdlp-web-editor"
+  }));
+}
+
+function refreshBankExport(items = loadNews()) {
+  const box = $("#bankExport");
+  const output = $("#bankExportText");
+  if (!box || !output) return;
+  const shared = bankSharedItems(items);
+  if (!shared.length) {
+    box.hidden = true;
+    output.value = "";
+    return;
+  }
+  box.hidden = false;
+  output.value = JSON.stringify(shared, null, 2);
+}
+
 function publishPost() {
   if ($("#adminKey").value !== "gdlp-admin") return adminMessage("Clave incorrecta. Demo local: gdlp-admin");
   const title = $("#postTitle").value.trim();
-  const text = $("#postText").value.trim();
-  if (title.length < 3 || text.length < 8) return adminMessage("Completa título y texto.");
+  const html = sanitizeRichHtml($("#postEditor")?.innerHTML || "");
+  const text = plainTextFromHtml(html).slice(0, 220);
+  if (title.length < 3 || text.length < 8) return adminMessage("Completa título y contenido.");
   const news = loadNews();
+  const cover = $("#postImage").value.trim();
+  const gallery = lines($("#postImages").value);
+  const videos = [$("#postVideo").value.trim(), ...lines($("#postVideos").value)].filter(Boolean);
+  const shareWithBank = Boolean($("#shareWithBank")?.checked);
   news.unshift({
     id: slugify(title),
     title,
     text,
+    html,
     tag: $("#postTag").value,
-    image: $("#postImage").value.trim() || fallbackNewsImage(news.length),
-    video: $("#postVideo").value.trim(),
-    date: new Date().toLocaleDateString("es-ES")
+    image: cover || gallery[0] || fallbackNewsImage(news.length),
+    images: [cover, ...gallery].filter(Boolean),
+    video: videos[0] || "",
+    videos,
+    date: new Date().toLocaleDateString("es-ES"),
+    shareWithBank
   });
-  saveNews(news.slice(0, 12));
+  const nextNews = news.slice(0, 24);
+  saveNews(nextNews);
+  localStorage.setItem("gdlp-bank-shared-news", JSON.stringify(bankSharedItems(nextNews)));
   $("#postTitle").value = "";
-  $("#postText").value = "";
   $("#postImage").value = "";
+  $("#postImages").value = "";
   $("#postVideo").value = "";
+  $("#postVideos").value = "";
+  $("#postEditor").innerHTML = "";
+  if ($("#shareWithBank")) $("#shareWithBank").checked = false;
   renderNews();
-  adminMessage("Noticia publicada en portada.");
+  refreshBankExport(nextNews);
+  adminMessage(shareWithBank ? "Noticia publicada y marcada para Banco de La Placeta." : "Noticia publicada en portada.");
 }
 
 function adminMessage(text) {
   $("#adminOutput").textContent = text;
+}
+
+function setupRichEditor() {
+  const editor = $("#postEditor");
+  if (!editor) return;
+  $$("[data-rich]").forEach((button) => button.addEventListener("click", () => {
+    editor.focus();
+    document.execCommand(button.dataset.rich, false);
+  }));
+  $$("[data-rich-block]").forEach((button) => button.addEventListener("click", () => {
+    editor.focus();
+    document.execCommand("formatBlock", false, button.dataset.richBlock);
+  }));
+  $("[data-rich-link]")?.addEventListener("click", () => {
+    editor.focus();
+    const href = prompt("URL del enlace");
+    if (href) document.execCommand("createLink", false, href);
+  });
+  editor.addEventListener("paste", (event) => {
+    event.preventDefault();
+    const text = event.clipboardData?.getData("text/plain") || "";
+    document.execCommand("insertText", false, text);
+  });
+}
+
+async function copyBankExport() {
+  const value = $("#bankExportText")?.value || "";
+  if (!value) return adminMessage("No hay noticias marcadas para Banco.");
+  if (navigator.clipboard) await navigator.clipboard.writeText(value);
+  adminMessage("Paquete Banco copiado.");
 }
 
 function toast(text) {
@@ -593,6 +770,8 @@ document.addEventListener("DOMContentLoaded", () => {
   renderPlanDetailPage();
   updateAgeResult();
   makeCaptcha();
+  setupRichEditor();
+  refreshBankExport();
 
   $$("[data-open]").forEach((button) => button.addEventListener("click", () => openModal(button.dataset.open)));
   $$("[data-doc]").forEach((button) => button.addEventListener("click", () => generateDocCover(button.dataset.doc)));
@@ -613,4 +792,5 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   $("#memberLogin")?.addEventListener("click", memberDemo);
   $("#publishPost")?.addEventListener("click", publishPost);
+  $("#copyBankExport")?.addEventListener("click", copyBankExport);
 });

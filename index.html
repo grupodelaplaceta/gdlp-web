@@ -22,10 +22,7 @@
     <header class="topbar">
       <a class="brand" href="#inicio" aria-label="Grupo de La Placeta">
         <img src="./assets/logo.png" alt="">
-        <span>
-          <strong>Grupo de La Placeta</strong>
-          <small>Asociación · Ecosistema Virtual</small>
-        </span>
+        
       </a>
       <nav class="desktop-nav" aria-label="Navegación principal">
         <a href="./ecosistema.html">Ecosistema</a>
@@ -213,11 +210,33 @@
       </div>
       <div class="form-grid">
         <label>Imagen de portada<input id="postImage" placeholder="https://.../imagen.jpg"></label>
-        <label>Vídeo opcional<input id="postVideo" placeholder="https://www.youtube.com/watch?v=..."></label>
+        <label>Vídeos<input id="postVideo" placeholder="Un enlace de vídeo principal"></label>
       </div>
-      <label>Texto<textarea id="postText" rows="5" placeholder="Contenido de la noticia..."></textarea></label>
+      <label>Galería de imágenes<textarea id="postImages" rows="3" placeholder="Una URL de imagen por línea"></textarea></label>
+      <label>Más vídeos<textarea id="postVideos" rows="3" placeholder="YouTube, Vimeo o mp4. Un enlace por línea"></textarea></label>
+      <div class="editor-toolbar" aria-label="Formato de noticia">
+        <button type="button" data-rich="bold"><strong>B</strong></button>
+        <button type="button" data-rich="italic"><em>I</em></button>
+        <button type="button" data-rich="insertUnorderedList">Lista</button>
+        <button type="button" data-rich-block="h2">H2</button>
+        <button type="button" data-rich-block="blockquote">Cita</button>
+        <button type="button" data-rich-link>Enlace</button>
+      </div>
+      <label>Contenido enriquecido
+        <div id="postEditor" class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Redacta la noticia con subtítulos, enlaces, listas y citas..."></div>
+      </label>
+      <label class="check bank-share-check">
+        <input id="shareWithBank" type="checkbox">
+        <span>Compartir también en la web del Banco de La Placeta</span>
+      </label>
       <button class="primary" id="publishPost" type="button">Publicar</button>
       <div class="admin-output" id="adminOutput"></div>
+      <div class="bank-export" id="bankExport" hidden>
+        <strong>Paquete para banco-web</strong>
+        <p>Copia este bloque en el feed compartido o úsalo como payload de importación cuando conectes backend.</p>
+        <textarea id="bankExportText" rows="8" readonly></textarea>
+        <button class="secondary" id="copyBankExport" type="button">Copiar paquete Banco</button>
+      </div>
     </form>
   </dialog>
 
