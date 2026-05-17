@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alta | Grupo de La Placeta</title>
+  <meta name="description" content="Alta en el ecosistema del Grupo de La Placeta mediante PlacetaID y autenticador.">
+  <meta name="theme-color" content="#3F00D8">
+  <link rel="icon" href="./assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="shell" data-theme="light">
+    <header class="topbar">
+      <a class="brand" href="./index.html" aria-label="Grupo de La Placeta">
+        <img src="./assets/logo.png" alt="">
+        <span><strong>Grupo de La Placeta</strong><small>Alta con PlacetaID</small></span>
+      </a>
+      <nav class="desktop-nav" aria-label="Navegación principal">
+        <a href="./index.html">Inicio</a>
+        <a href="./ecosistema.html">Ecosistema</a>
+        <a href="./plan-2026.html">Plan 2026</a>
+        <a href="./noticias.html">Noticias</a>
+        <a href="./gobernanza.html">Gobernanza</a>
+      </nav>
+      <div class="top-actions"><button class="icon-btn" id="themeToggle" type="button" aria-label="Cambiar tema">◐</button></div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <p class="eyebrow">Inscripción</p>
+        <h1>Alta en el ecosistema</h1>
+        <p>Completa el registro, acepta el aviso de rol y activa PlacetaID escaneando el QR del autenticador.</p>
+      </section>
+
+      <section class="content-layout wizard" id="onboardingForm">
+        <div class="wizard-steps">
+          <span class="active" data-step-dot="1">1 Datos</span>
+          <span data-step-dot="2">2 Consentimiento</span>
+          <span data-step-dot="3">3 Autenticador</span>
+        </div>
+        <section class="wizard-page active" data-step="1">
+          <div class="form-grid">
+            <label>Nombre<input id="firstName" required placeholder="Ej: Alba"></label>
+            <label>Apellidos<input id="lastName" required placeholder="Ej: Placeta"></label>
+            <label>Correo de contacto<input id="contactEmail" type="email" placeholder="miembro@ejemplo.es"></label>
+            <label>Fecha de nacimiento real<input id="birthDate" type="date" required></label>
+            <label>Contraseña PlacetaID<input id="placetaPassword" type="password" required minlength="8" placeholder="Mínimo 8 caracteres"></label>
+            <label>Repetir contraseña<input id="placetaPassword2" type="password" required minlength="8" placeholder="Repite la contraseña"></label>
+            <label>Proyecto inicial<select id="initialProject"><option>Participante individual</option><option>Empresa de rol</option><option>Asociación colaboradora</option><option>Voluntariado institucional</option></select></label>
+          </div>
+          <div class="age-result" id="ageResult">Introduce tu fecha de nacimiento para calcular el rango.</div>
+        </section>
+        <section class="wizard-page" data-step="2">
+          <div class="consent-box">
+            <strong>Aviso de rol</strong>
+            <p>Declaro comprender que el ecosistema de La Placeta es una simulación lúdica y que las Placetas no tienen valor económico real.</p>
+            <label class="check"><input id="roleConsent" type="checkbox"> Acepto expresamente la naturaleza ficticia y sin ánimo de lucro.</label>
+          </div>
+          <div class="consent-box">
+            <strong>Protección de datos</strong>
+            <p>Consiento el tratamiento de mis datos de conexión, IP y dispositivo para seguridad, auditoría y funcionamiento interno.</p>
+            <label class="check"><input id="privacyConsent" type="checkbox"> Acepto el tratamiento de datos conforme RGPD/LOPDGDD.</label>
+          </div>
+          <div class="captcha-box">
+            <span id="captchaQuestion"></span>
+            <input id="captchaAnswer" inputmode="numeric" placeholder="Respuesta">
+          </div>
+        </section>
+        <section class="wizard-page" data-step="3">
+          <div class="totp-setup" id="totpSetup">
+            <span>PlacetaID pendiente</span>
+            <h3>Crearemos tu identidad al continuar</h3>
+            <p>Después tendrás que escanear el QR con Google Authenticator, Microsoft Authenticator, 2FAS o una app compatible.</p>
+          </div>
+          <div class="form-grid totp-verifier" id="totpVerifier" hidden>
+            <label>Código del autenticador<input id="totpCode" inputmode="numeric" maxlength="7" placeholder="000 000"></label>
+            <button class="secondary" id="verifyTotp" type="button">Verificar QR</button>
+          </div>
+          <div class="certificate" id="certificatePreview" hidden>
+            <span>Certificado de Identidad Digital y Registro</span>
+            <h3>Autenticador verificado</h3>
+            <p>Tu alta ya está activada en PlacetaID.</p>
+          </div>
+        </section>
+        <div class="wizard-actions">
+          <button class="secondary" id="prevStep" type="button">Atrás</button>
+          <button class="primary" id="nextStep" type="button">Continuar</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <strong>Grupo de La Placeta</strong>
+      <nav><a href="./gobernanza.html">Naturaleza legal</a><a href="./noticias.html">Ayuda y noticias</a></nav>
+    </footer>
+  </div>
+  <script src="./app.js"></script>
+</body>
+</html>

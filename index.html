@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <div class="shell" data-theme="dark">
+  <div class="shell" data-theme="light">
     <header class="topbar">
       <a class="brand" href="#inicio" aria-label="Grupo de La Placeta">
         <img src="./assets/logo.png" alt="">
@@ -26,120 +26,67 @@
         </span>
       </a>
       <nav class="desktop-nav" aria-label="Navegación principal">
-        <a href="#ecosistema">Ecosistema</a>
-        <a href="#alta">Alta</a>
-        <a href="#noticias">Noticias</a>
-        <a href="#gobernanza">Gobernanza</a>
+        <a href="./ecosistema.html">Ecosistema</a>
+        <a href="./alta.html">Alta</a>
+        <a href="./plan-2026.html">Plan 2026</a>
+        <a href="./noticias.html">Noticias</a>
+        <a href="./gobernanza.html">Gobernanza</a>
       </nav>
       <div class="top-actions">
         <button class="icon-btn" id="themeToggle" type="button" aria-label="Cambiar tema">◐</button>
         <button class="secondary small" data-open="memberModal" type="button">Portal miembro</button>
-        <button class="primary small" data-open="onboardingModal" type="button">Solicitar alta</button>
+        <a class="primary small" href="./alta.html">Solicitar alta</a>
       </div>
     </header>
 
     <main>
       <section class="hero" id="inicio">
         <div class="hero-copy">
-          <p class="eyebrow">Institución oficial GDLP</p>
-          <h1>Bienvenidos al Ecosistema Virtual de La Placeta</h1>
-          <p class="hero-lead">Una asociación sin ánimo de lucro que organiza un entorno de rol cooperativo, inclusivo y transparente. La actividad económica, administrativa y social ocurre dentro de una simulación lúdica sin dinero real.</p>
+          <p class="eyebrow">Asociación Grupo de La Placeta</p>
+          <h1>Ecosistema virtual, comunidad y gobernanza.</h1>
+          <p class="hero-lead">La web institucional de La Placeta reúne las altas de miembros, noticias oficiales, documentación y acceso a los servicios del ecosistema de rol.</p>
           <div class="hero-actions">
-            <a class="primary" href="#alta">Entrar al ecosistema</a>
-            <a class="ghost" href="#transparencia">Ver naturaleza legal</a>
+            <a class="primary" href="./alta.html">Entrar al ecosistema</a>
+            <a class="ghost" href="./gobernanza.html">Ver naturaleza legal</a>
           </div>
-          <div class="trust-strip">
-            <span><b>0 EUR</b> circulación real</span>
-            <span><b>RGPD</b> consentimiento explícito</span>
-            <span><b>v5.0</b> normativa unificada</span>
+          <div class="trust-strip compact">
+            <span>Sin dinero real</span>
+            <span>Consentimiento RGPD</span>
+            <span>Normativa v5.0</span>
           </div>
         </div>
         <aside class="hero-panel" aria-label="Resumen del ecosistema">
-          <div class="ecosystem-orbit">
-            <span class="node main">GDLP</span>
-            <span class="node bank">Banco</span>
-            <span class="node tax">TGLP</span>
-            <span class="node city">Ayto.</span>
-            <span class="node members">DIP</span>
-          </div>
-          <div class="panel-footer">
-            <strong>Portal central</strong>
-            <span>Altas, noticias, organizaciones, actas, normativa y acceso al miembro.</span>
+          <div class="institution-summary">
+            <span>Portal oficial</span>
+            <h2>Grupo de La Placeta</h2>
+            <p>Asociación sin ánimo de lucro para una simulación cooperativa y regulada.</p>
+            <ul>
+              <li>Alta y verificación con PlacetaID</li>
+              <li>Noticias y comunicaciones oficiales</li>
+              <li>Documentación y órganos internos</li>
+            </ul>
           </div>
         </aside>
       </section>
 
-      <section class="statement" id="transparencia">
-        <div>
-          <p class="eyebrow">Art. 3 · Estatutos</p>
-          <h2>Simulación, comunidad y transparencia</h2>
+      <section class="plan-section" id="plan-2026">
+        <div class="section-head compact">
+          <p class="eyebrow">Hoja de ruta</p>
+          <h2>Plan 2026</h2>
+          <p>Resumen de los proyectos estratégicos. La hoja de ruta completa tiene su propia página.</p>
         </div>
-        <p>El Grupo de La Placeta no ofrece servicios financieros reales. Las Placetas, cargos, contratos, empresas, impuestos y operaciones son instrumentos narrativos del juego de rol. No se permite intercambio por dinero real, inversión real, promesa de rentabilidad real ni actividad lucrativa externa.</p>
-      </section>
-
-      <section class="section-grid" id="ecosistema">
-        <div class="section-head">
-          <p class="eyebrow">Mapa vivo</p>
-          <h2>El Ecosistema</h2>
-          <p>Directorio institucional y comunitario de organizaciones públicas, empresas de rol y entidades colaboradoras internas.</p>
-        </div>
-        <div class="org-controls">
-          <button class="chip active" data-filter="all" type="button">Todo</button>
-          <button class="chip" data-filter="publica" type="button">Públicas</button>
-          <button class="chip" data-filter="empresa" type="button">Empresas</button>
-          <button class="chip" data-filter="asociacion" type="button">Asociaciones</button>
-        </div>
-        <div class="org-grid" id="orgGrid"></div>
-      </section>
-
-      <section class="onboarding-band" id="alta">
-        <div>
-          <p class="eyebrow">Capítulos I y II</p>
-          <h2>Alta guiada en el ecosistema</h2>
-          <p>Un asistente paso a paso recoge datos de rol, verifica edad, exige consentimiento RGPD y genera una prealta con DIP, rango y certificado descargable.</p>
-        </div>
-        <button class="primary" data-open="onboardingModal" type="button">Iniciar solicitud</button>
+        <div class="plan-grid compact-list" id="planPreview"></div>
+        <a class="section-link" href="./plan-2026.html">Ver Plan 2026 completo</a>
       </section>
 
       <section class="content-layout" id="noticias">
         <div class="section-head compact">
           <p class="eyebrow">Comunicación oficial</p>
           <h2>Noticias y comunicados</h2>
-          <p>Publicaciones institucionales, convocatorias, guías de ayuda y novedades del ecosistema.</p>
+          <p>Últimas publicaciones oficiales del Grupo de La Placeta.</p>
         </div>
-        <div class="news-grid" id="newsGrid"></div>
-      </section>
-
-      <section class="governance" id="gobernanza">
-        <div class="section-head compact">
-          <p class="eyebrow">Gobernanza</p>
-          <h2>Junta, documentos y administración</h2>
-        </div>
-        <div class="governance-grid">
-          <article class="board-card">
-            <span>Presidencia</span>
-            <strong>Junta Directiva GDLP</strong>
-            <p>Órgano responsable de admisión, normativa, auditoría interna y coordinación del ecosistema.</p>
-          </article>
-          <article class="document-card">
-            <span>PDF</span>
-            <strong>Estatutos de la Asociación</strong>
-            <p>Documento estatutario de naturaleza, fines, órganos y régimen interno.</p>
-            <button class="secondary" data-doc="estatutos" type="button">Generar portada PDF</button>
-          </article>
-          <article class="document-card">
-            <span>PDF</span>
-            <strong>Normativa Institucional v5.0</strong>
-            <p>Marco de altas, protección de datos, economía de rol y gobernanza operativa.</p>
-            <button class="secondary" data-doc="normativa" type="button">Generar portada PDF</button>
-          </article>
-          <article class="admin-card">
-            <span>Privado</span>
-            <strong>Panel de noticias</strong>
-            <p>Publicación de contenido institucional para portada y archivo de comunicados.</p>
-            <button class="primary" data-open="adminModal" type="button">Abrir panel admin</button>
-          </article>
-        </div>
+        <div class="news-grid compact-list" id="newsPreview"></div>
+        <a class="section-link" href="./noticias.html">Ver todas las noticias</a>
       </section>
     </main>
 
@@ -149,10 +96,11 @@
         <p>Asociación sin ánimo de lucro. Entorno de simulación virtual y juego de rol. Sin dinero real.</p>
       </div>
       <nav>
-        <a href="#transparencia">Transparencia</a>
-        <a href="#ecosistema">Organizaciones</a>
-        <a href="#alta">Alta</a>
-        <a href="#noticias">Noticias</a>
+        <a href="./gobernanza.html">Transparencia</a>
+        <a href="./ecosistema.html">Organizaciones</a>
+        <a href="./plan-2026.html">Plan 2026</a>
+        <a href="./alta.html">Alta</a>
+        <a href="./noticias.html">Noticias</a>
       </nav>
     </footer>
   </div>
@@ -168,13 +116,16 @@
       <div class="wizard-steps">
         <span class="active" data-step-dot="1">1 Datos</span>
         <span data-step-dot="2">2 Consentimiento</span>
-        <span data-step-dot="3">3 DIP</span>
+        <span data-step-dot="3">3 Autenticador</span>
       </div>
       <section class="wizard-page active" data-step="1">
         <div class="form-grid">
-          <label>Nombre de rol<input id="roleName" required placeholder="Ej: Alba Placeta"></label>
+          <label>Nombre<input id="firstName" required placeholder="Ej: Alba"></label>
+          <label>Apellidos<input id="lastName" required placeholder="Ej: Placeta"></label>
           <label>Correo de contacto<input id="contactEmail" type="email" placeholder="miembro@ejemplo.es"></label>
           <label>Fecha de nacimiento real<input id="birthDate" type="date" required></label>
+          <label>Contraseña PlacetaID<input id="placetaPassword" type="password" required minlength="8" placeholder="Mínimo 8 caracteres"></label>
+          <label>Repetir contraseña<input id="placetaPassword2" type="password" required minlength="8" placeholder="Repite la contraseña"></label>
           <label>Proyecto inicial<select id="initialProject"><option>Participante individual</option><option>Empresa de rol</option><option>Asociación colaboradora</option><option>Voluntariado institucional</option></select></label>
         </div>
         <div class="age-result" id="ageResult">Introduce tu fecha de nacimiento para calcular el rango.</div>
@@ -196,10 +147,19 @@
         </div>
       </section>
       <section class="wizard-page" data-step="3">
-        <div class="certificate" id="certificatePreview">
-          <span>Certificado pendiente</span>
-          <h3>Completa la solicitud</h3>
-          <p>Al confirmar se generará un DIP de prealta y un certificado imprimible.</p>
+        <div class="totp-setup" id="totpSetup">
+          <span>PlacetaID pendiente</span>
+          <h3>Crearemos tu identidad al continuar</h3>
+          <p>Después tendrás que escanear el QR con Google Authenticator, Microsoft Authenticator, 2FAS o una app compatible.</p>
+        </div>
+        <div class="form-grid totp-verifier" id="totpVerifier" hidden>
+          <label>Código del autenticador<input id="totpCode" inputmode="numeric" maxlength="7" placeholder="000 000"></label>
+          <button class="secondary" id="verifyTotp" type="button">Verificar QR</button>
+        </div>
+        <div class="certificate" id="certificatePreview" hidden>
+          <span>Certificado de Identidad Digital y Registro</span>
+          <h3>Autenticador verificado</h3>
+          <p>Tu alta ya está activada en PlacetaID.</p>
         </div>
       </section>
       <div class="wizard-actions">
@@ -239,10 +199,21 @@
         <label>Título<input id="postTitle" placeholder="Convocatoria de Junta"></label>
         <label>Categoría<select id="postTag"><option>Comunicado</option><option>Ayuda</option><option>Normativa</option><option>Ecosistema</option></select></label>
       </div>
+      <div class="form-grid">
+        <label>Imagen de portada<input id="postImage" placeholder="https://.../imagen.jpg"></label>
+        <label>Vídeo opcional<input id="postVideo" placeholder="https://www.youtube.com/watch?v=..."></label>
+      </div>
       <label>Texto<textarea id="postText" rows="5" placeholder="Contenido de la noticia..."></textarea></label>
       <button class="primary" id="publishPost" type="button">Publicar</button>
       <div class="admin-output" id="adminOutput"></div>
     </form>
+  </dialog>
+
+  <dialog class="modal" id="newsModal">
+    <article class="modal-panel news-detail">
+      <button class="close" value="cancel" data-close-news aria-label="Cerrar">×</button>
+      <div id="newsDetailContent"></div>
+    </article>
   </dialog>
 
   <script src="./app.js"></script>

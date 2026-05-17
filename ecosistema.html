@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ecosistema | Grupo de La Placeta</title>
+  <meta name="description" content="Directorio institucional del ecosistema virtual del Grupo de La Placeta.">
+  <meta name="theme-color" content="#3F00D8">
+  <link rel="icon" href="./assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="shell" data-theme="light">
+    <header class="topbar">
+      <a class="brand" href="./index.html" aria-label="Grupo de La Placeta">
+        <img src="./assets/logo.png" alt="">
+        <span><strong>Grupo de La Placeta</strong><small>Ecosistema virtual</small></span>
+      </a>
+      <nav class="desktop-nav" aria-label="Navegación principal">
+        <a href="./index.html">Inicio</a>
+        <a href="./alta.html">Alta</a>
+        <a href="./plan-2026.html">Plan 2026</a>
+        <a href="./noticias.html">Noticias</a>
+        <a href="./gobernanza.html">Gobernanza</a>
+      </nav>
+      <div class="top-actions"><button class="icon-btn" id="themeToggle" type="button" aria-label="Cambiar tema">◐</button></div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <p class="eyebrow">Mapa institucional</p>
+        <h1>Ecosistema de La Placeta</h1>
+        <p>Organizaciones públicas, empresas internas y asociaciones colaboradoras dentro de la simulación.</p>
+      </section>
+
+      <section class="content-layout">
+        <div class="section-head compact">
+          <p class="eyebrow">Directorio vivo</p>
+          <h2>Organizaciones</h2>
+          <p>Filtra por tipo para consultar el estado y función de cada entidad.</p>
+        </div>
+        <div class="org-controls" aria-label="Filtros de organización">
+          <button class="chip active" data-filter="publica" type="button">Públicas</button>
+          <button class="chip" data-filter="empresa" type="button">Empresas</button>
+          <button class="chip" data-filter="asociacion" type="button">Asociaciones</button>
+          <button class="chip" data-filter="all" type="button">Todas</button>
+        </div>
+        <div class="org-grid" id="orgGrid"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <strong>Grupo de La Placeta</strong>
+      <nav><a href="./alta.html">Solicitar alta</a><a href="./gobernanza.html">Transparencia</a></nav>
+    </footer>
+  </div>
+  <script src="./app.js"></script>
+</body>
+</html>
