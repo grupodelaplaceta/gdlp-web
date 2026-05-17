@@ -2516,3 +2516,112 @@ iframe {
     padding: 8px;
   }
 }
+
+/* Mobile drawer visual cleanup */
+@media (max-width: 760px) {
+  .mobile-menu-toggle.icon-btn {
+    display: inline-grid;
+    place-items: center;
+    gap: 0;
+    padding: 0;
+    color: white;
+    background: rgba(255, 255, 255, .16);
+    border: 1px solid rgba(255, 255, 255, .28);
+    box-shadow: none;
+  }
+
+  .mobile-menu-toggle span {
+    grid-area: 1 / 1;
+    width: 18px;
+    height: 2px;
+    border-radius: 999px;
+    background: currentColor;
+    transition: transform .18s ease, opacity .18s ease;
+  }
+
+  .mobile-menu-toggle span:nth-child(1) {
+    transform: translateY(-6px);
+  }
+
+  .mobile-menu-toggle span:nth-child(3) {
+    transform: translateY(6px);
+  }
+
+  .drawer-open .mobile-menu-toggle span:nth-child(1) {
+    transform: rotate(45deg);
+  }
+
+  .drawer-open .mobile-menu-toggle span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .drawer-open .mobile-menu-toggle span:nth-child(3) {
+    transform: rotate(-45deg);
+  }
+
+  .drawer-overlay {
+    background: rgba(16, 12, 28, .48);
+    backdrop-filter: blur(3px);
+  }
+
+  .mobile-drawer {
+    color: var(--text);
+    background: var(--surface);
+    background-image: linear-gradient(180deg, rgba(63, 0, 216, .055), rgba(63, 0, 216, 0) 170px);
+    border-left: 1px solid var(--line);
+    box-shadow: -18px 0 54px rgba(17, 12, 34, .24);
+    overflow: hidden;
+  }
+
+  [data-theme="dark"] .mobile-drawer,
+  .shell[data-theme="dark"] ~ .mobile-drawer {
+    background: #1d1a29;
+    background-image: linear-gradient(180deg, rgba(63, 0, 216, .20), rgba(63, 0, 216, 0) 170px);
+  }
+
+  .drawer-head {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .drawer-close.icon-btn {
+    display: grid;
+    place-items: center;
+    padding: 0;
+    color: var(--text);
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    line-height: 1;
+    box-shadow: none;
+  }
+
+  .drawer-close.icon-btn:hover {
+    color: white;
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .mobile-drawer nav a {
+    color: var(--text);
+    background: rgba(63, 0, 216, .06);
+    border: 1px solid rgba(63, 0, 216, .12);
+  }
+
+  [data-theme="dark"] .mobile-drawer nav a,
+  .shell[data-theme="dark"] ~ .mobile-drawer nav a {
+    background: rgba(255,255,255,.06);
+    border-color: rgba(255,255,255,.10);
+  }
+
+  .mobile-drawer nav a:hover,
+  .mobile-drawer nav a:focus-visible {
+    color: white;
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .drawer-cta {
+    color: white;
+    background: var(--accent);
+    border: 1px solid var(--accent);
+  }
+}
