@@ -361,6 +361,90 @@ h2 {
   gap: 24px;
   align-items: center;
 }
+.legal-hero {
+  width: min(980px, 100%);
+}
+.legal-strip {
+  width: min(760px, 100%);
+}
+.legal-notice {
+  border-color: rgba(63,0,216,.22);
+  background:
+    linear-gradient(135deg, var(--surface), rgba(63,0,216,.055));
+}
+.legal-layout {
+  display: grid;
+  gap: 18px;
+}
+.legal-grid,
+.privacy-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.legal-card,
+.privacy-columns article,
+.legal-timeline article {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--bg-2);
+}
+.legal-card span {
+  display: inline-flex;
+  margin-bottom: 10px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  font-size: .78rem;
+  font-weight: 750;
+}
+.legal-card p,
+.legal-timeline p,
+.privacy-columns p {
+  margin-bottom: 0;
+  color: var(--muted);
+  line-height: 1.62;
+}
+.legal-timeline {
+  display: grid;
+  gap: 10px;
+}
+.legal-timeline article {
+  display: grid;
+  grid-template-columns: minmax(170px, .34fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.legal-timeline strong,
+.privacy-columns h3 {
+  color: var(--text);
+  font-size: 1rem;
+}
+.privacy-columns h3 {
+  margin-bottom: 8px;
+}
+.inline-link {
+  display: inline-flex;
+  margin-top: 10px;
+}
+.guardian-box[hidden] {
+  display: none;
+}
+.guardian-search {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: end;
+  margin: 12px 0;
+}
+.guardian-search .secondary {
+  min-height: 46px;
+}
+.guardian-result {
+  margin-top: 12px;
+}
 .statement p:last-child,
 .section-head p,
 .onboarding-band p,
@@ -466,6 +550,84 @@ h2 {
   margin-top: 8px;
   color: var(--muted);
   font-weight: 600;
+}
+.plan-budget-mini {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.plan-budget-mini strong {
+  color: var(--accent);
+}
+.plan-budget-mini small {
+  margin-top: 0;
+}
+.plan-budget-detail {
+  margin: 18px 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--bg-2);
+}
+.plan-budget-head,
+.plan-budget-list article {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+}
+.plan-budget-head {
+  margin-bottom: 12px;
+}
+.plan-budget-head h2 {
+  margin-bottom: 0;
+  color: var(--accent);
+}
+.plan-budget-head > span {
+  padding: 7px 10px;
+  border-radius: 999px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  font-weight: 700;
+  font-size: .82rem;
+}
+.plan-budget-list {
+  display: grid;
+  gap: 8px;
+}
+.plan-budget-list article {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+.plan-budget-list span {
+  display: inline-flex;
+  margin-bottom: 7px;
+  padding: 5px 8px;
+  border-radius: 999px;
+  color: white;
+  background: var(--accent);
+  font-size: .72rem;
+  font-weight: 700;
+}
+.plan-budget-list strong {
+  display: block;
+}
+.plan-budget-list small,
+.budget-amount small {
+  color: var(--muted);
+  font-weight: 650;
+}
+.budget-amount {
+  min-width: 110px;
+  text-align: right;
 }
 .card-link,
 .section-link {
@@ -1882,6 +2044,7 @@ iframe {
   }
 
   .mobile-drawer nav a,
+  .drawer-member,
   .drawer-cta {
     min-height: 46px;
     display: flex;
@@ -1897,6 +2060,7 @@ iframe {
     border: 1px solid var(--line);
   }
 
+  .drawer-member,
   .drawer-cta {
     justify-content: center;
   }
@@ -2519,6 +2683,28 @@ iframe {
 
 /* Mobile drawer visual cleanup */
 @media (max-width: 760px) {
+  .legal-grid,
+  .privacy-columns,
+  .legal-timeline article,
+  .guardian-search {
+    grid-template-columns: 1fr;
+  }
+
+  .legal-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .plan-budget-head,
+  .plan-budget-list article {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .budget-amount {
+    width: 100%;
+    text-align: left;
+  }
+
   .mobile-menu-toggle.icon-btn {
     display: inline-grid;
     place-items: center;
@@ -2613,10 +2799,18 @@ iframe {
   }
 
   .mobile-drawer nav a:hover,
-  .mobile-drawer nav a:focus-visible {
+  .mobile-drawer nav a:focus-visible,
+  .drawer-member:hover,
+  .drawer-member:focus-visible {
     color: white;
     background: var(--accent);
     border-color: var(--accent);
+  }
+
+  .drawer-member {
+    color: var(--text);
+    background: var(--surface-2);
+    border: 1px solid var(--line);
   }
 
   .drawer-cta {

@@ -20,16 +20,17 @@
 <body>
   <div class="shell" data-theme="light">
     <header class="topbar">
-      <a class="brand" href="#inicio" aria-label="Grupo de La Placeta">
+      <a class="brand" href="./index.html" aria-label="Grupo de La Placeta">
         <img src="./assets/logo.png" alt="">
-        
       </a>
       <nav class="desktop-nav" aria-label="Navegación principal">
+        <a href="./index.html">Inicio</a>
         <a href="./ecosistema.html">Ecosistema</a>
         <a href="./alta.html">Alta</a>
         <a href="./plan-2026.html">Plan 2026</a>
         <a href="./noticias.html">Noticias</a>
         <a href="./gobernanza.html">Gobernanza</a>
+        <a href="./privacidad.html">Privacidad</a>
       </nav>
       <div class="top-actions">
         <button class="icon-btn" id="themeToggle" type="button" aria-label="Cambiar tema">◐</button>
@@ -37,8 +38,7 @@
         <a class="primary small" href="./alta.html">Solicitar alta</a>
       </div>
     </header>
-
-    <main>
+<main>
       <section class="hero" id="inicio">
         <div class="hero-copy">
           <p class="eyebrow">Asociación Grupo de La Placeta</p>
@@ -100,6 +100,7 @@
         <a href="./plan-2026.html">Plan 2026</a>
         <a href="./alta.html">Alta</a>
         <a href="./noticias.html">Noticias</a>
+        <a href="./privacidad.html">Privacidad</a>
       </nav>
     </footer>
   </div>
@@ -137,8 +138,26 @@
         </div>
         <div class="consent-box">
           <strong>Protección de datos</strong>
-          <p>Consiento el tratamiento de mis datos de conexión, IP y dispositivo para seguridad, auditoría y funcionamiento interno.</p>
+          <p>Consiento el tratamiento de mis datos de conexión, IP y dispositivo para seguridad, auditoría y funcionamiento interno. Puedes revisar la política completa antes de continuar.</p>
           <label class="check"><input id="privacyConsent" type="checkbox"> Acepto el tratamiento de datos conforme RGPD/LOPDGDD.</label>
+          <a class="section-link inline-link" href="./privacidad.html">Ver política de privacidad</a>
+        </div>
+        <div class="consent-box guardian-box" id="guardianBox" hidden>
+          <strong>Tutor legal</strong>
+          <p>Las altas de menores requieren vincular un tutor legal. Puedes localizarlo si ya tiene PlacetaID o registrar sus datos de contacto para validación.</p>
+          <label class="check"><input id="guardianHasPlacetaId" type="checkbox"> El tutor ya tiene PlacetaID</label>
+          <div class="guardian-search">
+            <label>DIP o correo del tutor<input id="guardianLookup" placeholder="12345678A o tutor@ejemplo.es"></label>
+            <button class="secondary" id="guardianSearchBtn" type="button">Buscar tutor</button>
+          </div>
+          <div class="form-grid">
+            <label>Nombre del tutor<input id="guardianName" placeholder="Nombre y apellidos"></label>
+            <label>Correo del tutor<input id="guardianEmail" type="email" placeholder="tutor@ejemplo.es"></label>
+            <label>DIP del tutor<input id="guardianDip" placeholder="12345678A"></label>
+            <label>Relación<select id="guardianRelation"><option>Madre/padre</option><option>Tutor legal</option><option>Representante autorizado</option></select></label>
+          </div>
+          <label class="check"><input id="guardianConsent" type="checkbox"> Confirmo que el tutor legal autoriza esta alta tutelada.</label>
+          <div class="age-result guardian-result" id="guardianResult">Pendiente de localizar o completar tutor.</div>
         </div>
         <div class="captcha-box">
           <span id="captchaQuestion"></span>
@@ -187,7 +206,7 @@
         <p>Vista privada de perfil asociativo, contratos y solicitudes a la Junta.</p>
       </div>
       <div class="form-grid">
-        <label>DIP<input id="memberDip" placeholder="DIP-5921"></label>
+        <label>DIP<input id="memberDip" placeholder="12345678A"></label>
         <label>Contraseña<input id="memberPass" type="password" placeholder="PIN o contraseña"></label>
       </div>
       <button class="primary" id="memberLogin" type="button">Abrir perfil demo</button>
@@ -201,9 +220,9 @@
       <div class="modal-head">
         <p class="eyebrow">Admin publicaciones</p>
         <h2>Panel de noticias</h2>
-        <p>Publica comunicados institucionales. En producción esto debe conectarse a MongoDB con roles de Junta.</p>
+        <p>Publica comunicados institucionales. En producción esto debe conectarse al backend con roles de Junta.</p>
       </div>
-      <label>Clave admin local<input id="adminKey" type="password" placeholder="gdlp-admin"></label>
+      <label>Clave editorial<input id="adminKey" type="password" placeholder="Clave editorial"></label>
       <div class="form-grid">
         <label>Título<input id="postTitle" placeholder="Convocatoria de Junta"></label>
         <label>Categoría<select id="postTag"><option>Comunicado</option><option>Ayuda</option><option>Normativa</option><option>Ecosistema</option></select></label>

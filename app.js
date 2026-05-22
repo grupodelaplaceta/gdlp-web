@@ -11,37 +11,62 @@ const planProjects = [
   {
     id: "infraestructura-core",
     title: "Infraestructura Core",
-    tag: "MongoDB & APIs",
+    tag: "Datos y APIs",
     text: "PlacetaID, API Gateway y estado centralizado.",
-    status: "Primer semestre"
+    status: "Primer semestre",
+    budget: [
+      { area: "Identidad", concept: "PlacetaID y sesiones seguras", amount: 820, status: "Prioritario" },
+      { area: "Integración", concept: "API Gateway y conectores internos", amount: 640, status: "Planificado" },
+      { area: "Operación", concept: "Monitorización y copias de seguridad", amount: 290, status: "Continuo" }
+    ]
   },
   {
     id: "gobernanza-economica",
     title: "Gobernanza económica",
     tag: "Fiscalidad automática",
     text: "IVA, tasas, IRM y alertas automáticas.",
-    status: "En diseño"
+    status: "En diseño",
+    budget: [
+      { area: "Regulación", concept: "Motor de IVA simulado e IRM", amount: 430, status: "Diseño" },
+      { area: "Auditoría", concept: "Panel de alertas y revisión", amount: 360, status: "Planificado" },
+      { area: "Documentación", concept: "Guías económicas para miembros", amount: 120, status: "Pendiente" }
+    ]
   },
   {
     id: "sdk-comercial",
     title: "SDK comercial",
     tag: "Pagos y webhooks",
     text: "Checkout, enlaces de cobro y eventos.",
-    status: "Piloto técnico"
+    status: "Piloto técnico",
+    budget: [
+      { area: "Comercio", concept: "Checkout y enlaces de cobro", amount: 520, status: "Piloto" },
+      { area: "Empresas", concept: "Webhooks para tiendas internas", amount: 310, status: "Planificado" },
+      { area: "Soporte", concept: "Plantillas y pruebas con empresas", amount: 140, status: "Pendiente" }
+    ]
   },
   {
     id: "mercado-regulado",
     title: "Mercado regulado",
     tag: "Inversiones +18",
     text: "Operaciones con edad, límites y fiscalidad.",
-    status: "Marco normativo"
+    status: "Marco normativo",
+    budget: [
+      { area: "Normativa", concept: "Reglas de acceso +18 y límites", amount: 240, status: "Marco" },
+      { area: "Riesgo", concept: "Controles de saldo y actividad", amount: 390, status: "Planificado" },
+      { area: "Transparencia", concept: "Historial de operaciones simuladas", amount: 210, status: "Pendiente" }
+    ]
   },
   {
     id: "seguridad-privacidad",
     title: "Seguridad y privacidad",
     tag: "RGPD / LOPDGDD",
     text: "Logs, trazabilidad y baja con anonimización.",
-    status: "Prioridad 2026"
+    status: "Prioridad 2026",
+    budget: [
+      { area: "Privacidad", concept: "Consentimientos y derechos de usuarios", amount: 330, status: "Prioritario" },
+      { area: "Seguridad", concept: "Trazabilidad, registros y revisión", amount: 460, status: "Continuo" },
+      { area: "Ciclo de vida", concept: "Baja, bloqueo y anonimización", amount: 260, status: "Planificado" }
+    ]
   }
 ];
 
@@ -90,6 +115,7 @@ const defaultNews = [
 ];
 
 const PLACETAID_API_BASE = "https://id.laplaceta.org";
+const PLACETAID_CLIENT_KEY = window.PLACETAID_CLIENT_KEY || localStorage.getItem("placetaid-client-key") || "";
 const BANCO_GDLP_NEWS_API = "https://banco.laplaceta.org/api/gdlp-news";
 let wizardStep = 1;
 let captchaTotal = 0;
@@ -215,10 +241,53 @@ function renderPlanProjects() {
       <span>${item.tag}</span>
       <h3>${item.title}</h3>
       <p>${item.text}</p>
+      <div class="plan-budget-mini">
+        <strong>${moneyPz(planBudgetTotal(item))}</strong>
+        <small>${item.budget?.length || 0} partidas</small>
+      </div>
       <small>${item.status}</small>
       <a class="card-link" href="./plan-detalle.html?id=${item.id}">Ver proyecto</a>
     </article>
   `).join("");
+}
+
+function planBudgetTotal(item) {
+  return (item.budget || []).reduce((sum, entry) => sum + Number(entry.amount || 0), 0);
+}
+
+function planBudgetMarkup(item) {
+  const budget = item.budget || [];
+  if (!budget.length) return "";
+  const total = planBudgetTotal(item);
+  return `
+    <section class="plan-budget-detail">
+      <div class="plan-budget-head">
+        <div>
+          <p class="eyebrow">Presupuesto</p>
+          <h2>${moneyPz(total)}</h2>
+        </div>
+        <span>${budget.length} partidas de gasto</span>
+      </div>
+      <div class="plan-budget-list">
+        ${budget.map((entry) => {
+          const percent = total ? Math.round((Number(entry.amount || 0) / total) * 100) : 0;
+          return `
+            <article>
+              <div>
+                <span>${escapeHtml(entry.area)}</span>
+                <strong>${escapeHtml(entry.concept)}</strong>
+                <small>${escapeHtml(entry.status)}</small>
+              </div>
+              <div class="budget-amount">
+                <strong>${moneyPz(entry.amount)}</strong>
+                <small>${percent}%</small>
+              </div>
+            </article>
+          `;
+        }).join("")}
+      </div>
+    </section>
+  `;
 }
 
 function labelForType(type) {
@@ -375,6 +444,11 @@ function renderPlanDetailPage() {
       <strong>Estado</strong>
       <span>${item.status}</span>
     </div>
+    <div class="plan-detail-box">
+      <strong>Presupuesto total</strong>
+      <span>${moneyPz(planBudgetTotal(item))}</span>
+    </div>
+    ${planBudgetMarkup(item)}
     <p>Este proyecto forma parte del Plan 2026 del Grupo de La Placeta y se publicará como hoja de ruta institucional separada de las noticias ordinarias.</p>
     <div class="share-row"><button class="secondary" type="button" data-share>Compartir enlace</button><a class="ghost" href="./plan-2026.html">Volver al Plan 2026</a></div>
   `;
@@ -393,6 +467,10 @@ async function shareCurrentPage() {
 
 function openModal(id) {
   const dialog = document.getElementById(id);
+  if (!dialog && id === "memberModal") {
+    window.location.href = "./index.html?portal=member";
+    return;
+  }
   if (!dialog) return;
   if (id === "onboardingModal") resetWizard();
   dialog.showModal();
@@ -438,7 +516,8 @@ function setupMobileDrawer() {
       <button class="icon-btn drawer-close" type="button" aria-label="Cerrar menú">×</button>
     </div>
     <nav></nav>
-    <a class="primary drawer-cta" href="./alta.html">Alta</a>
+    <button class="secondary drawer-member" type="button" data-open="memberModal">Portal miembro</button>
+    <a class="primary drawer-cta" href="./alta.html">Solicitar alta</a>
   `;
 
   const drawerNav = drawer.querySelector("nav");
@@ -459,6 +538,10 @@ function setupMobileDrawer() {
   toggle.addEventListener("click", () => document.body.classList.contains("drawer-open") ? closeDrawer() : openDrawer());
   overlay.addEventListener("click", closeDrawer);
   drawer.querySelector(".drawer-close")?.addEventListener("click", closeDrawer);
+  drawer.querySelector("[data-open='memberModal']")?.addEventListener("click", () => {
+    closeDrawer();
+    openModal("memberModal");
+  });
   drawer.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeDrawer));
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") closeDrawer();
@@ -490,6 +573,69 @@ function updateAgeResult() {
   $("#ageResult").innerHTML = tier
     ? `<strong>${tier.name}</strong><br>Edad verificada: ${age} años · ${tier.limit} · ${tier.welcome}${tier.guardian ? "<br>Alta infantil: requiere gestión con tutores legales. Plataforma opcional de controles parentales disponible para límites, seguimiento y autorizaciones." : ""}`
     : "Introduce tu fecha de nacimiento para calcular el rango.";
+  updateGuardianVisibility(tier);
+}
+
+function updateGuardianVisibility(tier = tierForAge(calculateAge($("#birthDate")?.value))) {
+  const box = $("#guardianBox");
+  if (!box) return;
+  const required = Boolean(tier?.guardian);
+  box.hidden = !required;
+  box.querySelectorAll("input, select, button").forEach((field) => {
+    field.disabled = !required;
+  });
+  if (!required) {
+    ["guardianLookup", "guardianName", "guardianEmail", "guardianDip"].forEach((id) => {
+      const field = $(`#${id}`);
+      if (field) field.value = "";
+    });
+    if ($("#guardianHasPlacetaId")) $("#guardianHasPlacetaId").checked = false;
+    if ($("#guardianConsent")) $("#guardianConsent").checked = false;
+    if ($("#guardianResult")) $("#guardianResult").textContent = "Pendiente de localizar o completar tutor.";
+  }
+}
+
+function guardianPayload() {
+  return {
+    hasPlacetaId: Boolean($("#guardianHasPlacetaId")?.checked),
+    lookup: ($("#guardianLookup")?.value || "").trim(),
+    name: ($("#guardianName")?.value || "").trim(),
+    email: ($("#guardianEmail")?.value || "").trim(),
+    dip: ($("#guardianDip")?.value || "").trim().toUpperCase().replace(/[\s-]+/g, ""),
+    relation: ($("#guardianRelation")?.value || "Tutor legal").trim(),
+    consent: Boolean($("#guardianConsent")?.checked)
+  };
+}
+
+function findGuardianByLookup(value) {
+  const lookup = String(value || "").trim().toLowerCase();
+  const lookupDip = lookup.toUpperCase().replace(/[\s-]+/g, "");
+  if (!lookup) return null;
+  for (let index = 0; index < localStorage.length; index++) {
+    const key = localStorage.key(index);
+    if (!key?.startsWith("gdlp-prealta-")) continue;
+    const record = JSON.parse(localStorage.getItem(key) || "null");
+    const dip = String(record?.dip || "").toUpperCase().replace(/[\s-]+/g, "");
+    const email = String(record?.correo || record?.email || "").toLowerCase();
+    if (dip === lookupDip || email === lookup) return record;
+  }
+  return null;
+}
+
+function searchGuardian() {
+  const data = guardianPayload();
+  if (!data.lookup) return toast("Introduce el DIP o correo del tutor.");
+  const found = findGuardianByLookup(data.lookup);
+  if (!found) {
+    $("#guardianResult").textContent = "No se encontró un tutor local. Completa sus datos para validación manual.";
+    return toast("Tutor no encontrado. Puedes completar sus datos manualmente.");
+  }
+  $("#guardianName").value = found.nombreRol || found.nombre || "";
+  $("#guardianEmail").value = found.correo || found.email || "";
+  $("#guardianDip").value = found.dip || "";
+  $("#guardianHasPlacetaId").checked = true;
+  $("#guardianResult").innerHTML = `<strong>Tutor localizado</strong><br>${escapeHtml(found.nombreRol || "Tutor PlacetaID")} · ${escapeHtml(found.dip || data.lookup)}`;
+  toast("Tutor localizado.");
 }
 
 function authAppListMarkup() {
@@ -553,6 +699,14 @@ function validateStep() {
   }
   if (wizardStep === 2) {
     if (!$("#roleConsent").checked || !$("#privacyConsent").checked) return toast("Debes aceptar el aviso de rol y la política de datos.");
+    const tier = tierForAge(calculateAge($("#birthDate").value));
+    if (tier?.guardian) {
+      const guardian = guardianPayload();
+      const hasLookup = guardian.hasPlacetaId && (guardian.dip || guardian.lookup);
+      const hasManualData = guardian.name.length >= 3 && /\S+@\S+\.\S+/.test(guardian.email);
+      if (!hasLookup && !hasManualData) return toast("Indica el PlacetaID del tutor o completa nombre y correo del tutor legal.");
+      if (!guardian.consent) return toast("Debes confirmar la autorización del tutor legal.");
+    }
     if (Number($("#captchaAnswer").value) !== captchaTotal) return toast("Captcha incorrecto. Revisa la suma.");
   }
   return true;
@@ -575,9 +729,18 @@ function prevStep() {
   updateWizard();
 }
 
-function generateDip() {
-  const last = Math.floor(1000 + Math.random() * 9000);
-  return `DIP-${last}`;
+function dipInitialFromName(name) {
+  return String(name || "")
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase()
+    .match(/[A-Z]/)?.[0] || "X";
+}
+
+function generateDip(name = $("#firstName")?.value) {
+  const number = Math.floor(Math.random() * 100000000).toString().padStart(8, "0");
+  return `${number}${dipInitialFromName(name)}`;
 }
 
 async function registerInPlacetaId() {
@@ -585,25 +748,36 @@ async function registerInPlacetaId() {
   const nextButton = $("#nextStep");
   nextButton.disabled = true;
   nextButton.textContent = "Creando PlacetaID...";
-  const dip = generateDip();
+  const age = calculateAge($("#birthDate").value);
+  const tier = tierForAge(age);
+  const guardian = tier?.guardian ? guardianPayload() : null;
   const body = {
-    dip,
     nombre: $("#firstName").value.trim(),
     apellidos: $("#lastName").value.trim(),
     fechaNacimiento: $("#birthDate").value,
     rol: "miembro",
-    password: $("#placetaPassword").value
+    password: $("#placetaPassword").value,
+    altaTutelada: Boolean(guardian),
+    tutorLegal: guardian
   };
 
   try {
-    const response = await fetch(`${PLACETAID_API_BASE}/api/registro`, {
+    const registrationEndpoint = PLACETAID_CLIENT_KEY
+      ? `${PLACETAID_API_BASE}/api/registro/solicitante`
+      : `${PLACETAID_API_BASE}/api/registro`;
+    const headers = { "content-type": "application/json" };
+    if (PLACETAID_CLIENT_KEY) headers["x-api-key"] = PLACETAID_CLIENT_KEY;
+    const response = await fetch(registrationEndpoint, {
       method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(body)
+      headers,
+      body: JSON.stringify({ ...body, origen: "gdlp-web" })
     });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || "No se pudo crear el registro PlacetaID");
-    currentRegistration = { ...data, ...body };
+    if (!/^\d{8}[A-Z]$/.test(String(data.dip || "").trim().toUpperCase())) {
+      throw new Error("PlacetaID no devolvió un DIP con formato oficial");
+    }
+    currentRegistration = { ...body, ...data };
     $("#totpSetup").innerHTML = `
       <div class="totp-card">
         <img src="${data.qrCode}" alt="QR para configurar autenticador">
@@ -673,6 +847,7 @@ function generateCertificate() {
     simulacion_aceptada: true,
     gestion_tutores_legales: Boolean(tier.guardian),
     controles_parentales_opcionales: Boolean(tier.guardian),
+    tutor_legal: tier.guardian ? guardianPayload() : null,
     creadoEn: createdAt,
     origen: "Web GDLP"
   };
@@ -683,13 +858,14 @@ function generateCertificate() {
     <p><strong>${dip}</strong> · ${tier.name} · ${age} años</p>
     <p>Proyecto inicial: ${payload.proyecto}</p>
     ${tier.guardian ? "<p>Alta infantil gestionada con tutores legales. Puede vincularse opcionalmente a la plataforma de controles parentales.</p>" : ""}
+    ${payload.tutor_legal ? `<p>Tutor legal: ${escapeHtml(payload.tutor_legal.name || payload.tutor_legal.dip || payload.tutor_legal.email)} · ${escapeHtml(payload.tutor_legal.relation)}</p>` : ""}
     <p>Alta generada: ${createdAt}</p>
     <p>PlacetaID activado con autenticador 2FA. Registro de consentimiento: simulación lúdica aceptada y consentimiento RGPD activo.</p>
   `;
 }
 
 function memberDemo() {
-  const dip = $("#memberDip").value.trim().toUpperCase() || "DIP-DEMO";
+  const dip = $("#memberDip").value.trim().toUpperCase().replace(/[\s-]+/g, "") || "00000000X";
   const stored = localStorage.getItem(`gdlp-prealta-${dip}`);
   const data = stored ? JSON.parse(stored) : { dip, nombreRol: "Miembro demo", rango: "Ciudadanía Plena", proyecto: "Participante individual" };
   $("#memberOutput").innerHTML = `
@@ -748,8 +924,8 @@ async function publishSharedToBank(items, key) {
 }
 
 async function publishPost() {
-  if ($("#adminKey").value !== "gdlp-admin") return adminMessage("Clave incorrecta. Demo local: gdlp-admin");
-  const key = $("#adminKey").value;
+  const key = $("#adminKey").value.trim();
+  if (!key) return adminMessage("Introduce la clave editorial.");
   const title = $("#postTitle").value.trim();
   const html = sanitizeRichHtml($("#postEditor")?.innerHTML || "");
   const text = plainTextFromHtml(html).slice(0, 220);
@@ -887,6 +1063,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }));
 
   $("#birthDate")?.addEventListener("input", updateAgeResult);
+  $("#guardianSearchBtn")?.addEventListener("click", searchGuardian);
+  $("#guardianHasPlacetaId")?.addEventListener("change", () => {
+    if ($("#guardianResult")) {
+      $("#guardianResult").textContent = $("#guardianHasPlacetaId").checked
+        ? "Busca por DIP o correo para vincular el PlacetaID del tutor."
+        : "Completa los datos del tutor para validación manual.";
+    }
+  });
   $("#nextStep")?.addEventListener("click", nextStep);
   $("#prevStep")?.addEventListener("click", prevStep);
   $("#verifyTotp")?.addEventListener("click", verifyTotpSetup);
@@ -898,4 +1082,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("#memberLogin")?.addEventListener("click", memberDemo);
   $("#publishPost")?.addEventListener("click", publishPost);
   $("#copyBankExport")?.addEventListener("click", copyBankExport);
+  if (new URLSearchParams(location.search).get("portal") === "member") {
+    openModal("memberModal");
+  }
 });
