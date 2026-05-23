@@ -17,7 +17,7 @@ Este folder no necesita build. Publica `gdlp-web` como proyecto estático.
 
 ## Pendiente para producción real
 
-- Conectar el alta con la creación simultánea de cuenta bancaria base en Banco de La Placeta.
+- Mantener PlacetaID como alta independiente; Banco y Capitalia solo consumen la identidad despues, si el usuario entra alli.
 - Añadir captcha real y rate limiting específico del servidor GDLP.
 - Reemplazar admin local por autenticación de Junta.
 - Servir PDFs definitivos de estatutos y normativa.

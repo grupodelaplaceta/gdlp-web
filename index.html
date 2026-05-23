@@ -119,6 +119,15 @@
         <span data-step-dot="3">3 Autenticador</span>
       </div>
       <section class="wizard-page active" data-step="1">
+        <div class="consent-box migration-recovery-card">
+          <strong>Migracion de PlacetaID antiguo</strong>
+          <p>Si tu DIP esta en la lista de migraciones pendientes, se usara ese DIP asignado y completaras el alta normal para generar el QR.</p>
+          <div class="migration-recovery">
+            <label>DIP<input id="migrationDip" placeholder="Introduce tu DIP"></label>
+            <button class="secondary" id="recoverMigrationQr" type="button">Buscar DIP</button>
+          </div>
+          <div class="age-result" id="migrationResult" hidden></div>
+        </div>
         <div class="form-grid">
           <label>Nombre<input id="firstName" required placeholder="Ej: Alba"></label>
           <label>Apellidos<input id="lastName" required placeholder="Ej: Placeta"></label>

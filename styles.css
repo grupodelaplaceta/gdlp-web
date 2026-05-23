@@ -1020,6 +1020,13 @@ input:focus, select:focus, textarea:focus {
   word-break: break-all;
   font-size: .82rem;
 }
+.migration-recovery {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: end;
+  margin: 14px 0;
+}
 .auth-app-list {
   margin-top: 12px;
   display: flex;
@@ -1472,6 +1479,9 @@ input:focus, select:focus, textarea:focus {
 }
 
 @media (max-width: 640px) {
+  .migration-recovery {
+    grid-template-columns: 1fr;
+  }
   main, .footer { width: min(100% - 20px, 1180px); }
   .topbar {
     align-items: flex-start;

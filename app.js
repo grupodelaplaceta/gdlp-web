@@ -120,6 +120,7 @@ const BANCO_GDLP_NEWS_API = "https://banco.laplaceta.org/api/gdlp-news";
 let wizardStep = 1;
 let captchaTotal = 0;
 let currentRegistration = null;
+let migrationAssignment = null;
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -657,6 +658,9 @@ function resetWizard() {
   if (!$("#totpSetup")) return;
   wizardStep = 1;
   currentRegistration = null;
+  migrationAssignment = null;
+  if ($("#migrationResult")) $("#migrationResult").hidden = true;
+  if ($("#migrationDip")) $("#migrationDip").value = "";
   makeCaptcha();
   $("#totpSetup").innerHTML = `
     <span>PlacetaID pendiente</span>
@@ -691,9 +695,11 @@ function validateStep() {
     const firstName = $("#firstName").value.trim();
     const lastName = $("#lastName").value.trim();
     const age = calculateAge($("#birthDate").value);
+    const email = $("#contactEmail").value.trim();
     const password = $("#placetaPassword").value;
     const password2 = $("#placetaPassword2").value;
     if (firstName.length < 2 || lastName.length < 2 || age === null) return toast("Completa nombre, apellidos y fecha de nacimiento.");
+    if (!/\S+@\S+\.\S+/.test(email)) return toast("Introduce un correo válido para recuperar PlacetaID y el autenticador.");
     if (password.length < 8) return toast("La contraseña de PlacetaID debe tener al menos 8 caracteres.");
     if (password !== password2) return toast("Las contraseñas no coinciden.");
   }
@@ -754,6 +760,8 @@ async function registerInPlacetaId() {
   const body = {
     nombre: $("#firstName").value.trim(),
     apellidos: $("#lastName").value.trim(),
+    correo: $("#contactEmail").value.trim(),
+    ...(migrationAssignment ? { dip: migrationAssignment.dip, placeid: migrationAssignment.placeid } : {}),
     fechaNacimiento: $("#birthDate").value,
     rol: "miembro",
     password: $("#placetaPassword").value,
@@ -770,7 +778,7 @@ async function registerInPlacetaId() {
     const response = await fetch(registrationEndpoint, {
       method: "POST",
       headers,
-      body: JSON.stringify({ ...body, origen: "gdlp-web" })
+      body: JSON.stringify({ ...body, origen: migrationAssignment ? "gdlp-web-migracion" : "gdlp-web" })
     });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || "No se pudo crear el registro PlacetaID");
@@ -783,7 +791,7 @@ async function registerInPlacetaId() {
         <img src="${data.qrCode}" alt="QR para configurar autenticador">
         <div>
           <span>PlacetaID creado</span>
-          <h3>${data.dip}</h3>
+          <h3>${data.placeid || data.dip}</h3>
           <p>Escanea este QR en Google Authenticator, Microsoft Authenticator, 2FAS, Authy, Aegis, Bitwarden Authenticator, 1Password o cualquier app compatible con códigos TOTP. Escribe el primer código de 6 dígitos para activar el acceso.</p>
           <div class="totp-secret">Secreto manual: ${data.totpSecret}</div>
         </div>
@@ -802,6 +810,42 @@ async function registerInPlacetaId() {
   } finally {
     nextButton.disabled = false;
     nextButton.textContent = "Imprimir certificado";
+  }
+}
+
+async function recoverMigrationQr() {
+  const field = $("#migrationDip");
+  const result = $("#migrationResult");
+  const button = $("#recoverMigrationQr");
+  const dip = (field?.value || "").trim().toUpperCase().replace(/[\s-]+/g, "");
+  if (!/^\d{8}[A-Z]$/.test(dip)) return toast("Introduce un DIP válido.");
+
+  button.disabled = true;
+  button.textContent = "Buscando...";
+  if (result) {
+    result.hidden = false;
+    result.textContent = "Consultando DIP asignado...";
+  }
+
+  try {
+    const response = await fetch(`${PLACETAID_API_BASE}/api/migraciones/pendientes/${encodeURIComponent(dip)}`);
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "No hay migración pendiente para ese DIP");
+    migrationAssignment = { dip: data.dip, placeid: data.placeid };
+    if (result) {
+      result.hidden = false;
+      result.innerHTML = `<strong>DIP asignado</strong><br>${escapeHtml(data.dip)} · ${escapeHtml(data.placeid || data.dip)}. Completa el alta normal para generar el QR.`;
+    }
+    toast("DIP asignado encontrado. Completa el alta normal.");
+  } catch (error) {
+    if (result) {
+      result.hidden = false;
+      result.textContent = error instanceof Error ? error.message : "No se pudo recuperar el QR.";
+    }
+    toast(error instanceof Error ? error.message : "No se pudo recuperar el QR.");
+  } finally {
+    button.disabled = false;
+    button.textContent = "Buscar DIP";
   }
 }
 
@@ -838,6 +882,7 @@ function generateCertificate() {
   const createdAt = new Date().toLocaleString("es-ES");
   const payload = {
     dip,
+    placeid: currentRegistration?.placeid,
     nombreRol: `${$("#firstName").value.trim()} ${$("#lastName").value.trim()}`.trim(),
     correo: $("#contactEmail").value.trim(),
     edad: age,
@@ -1074,6 +1119,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("#nextStep")?.addEventListener("click", nextStep);
   $("#prevStep")?.addEventListener("click", prevStep);
   $("#verifyTotp")?.addEventListener("click", verifyTotpSetup);
+  $("#recoverMigrationQr")?.addEventListener("click", recoverMigrationQr);
   $("#totpCode")?.addEventListener("input", (event) => {
     let value = event.target.value.replace(/\D/g, "").slice(0, 6);
     if (value.length > 3) value = `${value.slice(0, 3)} ${value.slice(3)}`;
