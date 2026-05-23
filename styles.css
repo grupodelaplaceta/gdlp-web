@@ -1002,13 +1002,29 @@ input:focus, select:focus, textarea:focus {
   gap: 18px;
   align-items: center;
 }
+.totp-qr-frame {
+  width: 180px;
+  height: 180px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: white;
+  box-shadow: 0 16px 42px rgba(0,0,0,.18);
+}
 .totp-card img {
   width: 180px;
   height: 180px;
   border-radius: 18px;
   padding: 10px;
   background: white;
-  box-shadow: 0 16px 42px rgba(0,0,0,.18);
+  box-shadow: none;
+}
+.qr-load-error {
+  padding: 14px;
+  color: var(--accent);
+  font-weight: 750;
+  text-align: center;
+  line-height: 1.2;
 }
 .totp-secret {
   margin-top: 10px;
@@ -1794,6 +1810,13 @@ iframe {
     margin-inline: auto;
   }
 
+  .totp-qr-frame {
+    width: min(220px, 100%);
+    height: auto;
+    aspect-ratio: 1;
+    margin-inline: auto;
+  }
+
   .share-row,
   .wizard-actions {
     display: grid;
@@ -2451,6 +2474,18 @@ iframe {
   .wizard-steps {
     grid-template-columns: 1fr;
     gap: 8px;
+  }
+
+  .totp-qr-frame {
+    width: min(220px, 100%);
+    height: auto;
+    aspect-ratio: 1;
+    margin-inline: auto;
+  }
+
+  .totp-card img {
+    width: 100%;
+    height: 100%;
   }
 
   label,

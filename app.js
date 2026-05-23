@@ -749,11 +749,57 @@ function generateDip(name = $("#firstName")?.value) {
   return `${number}${dipInitialFromName(name)}`;
 }
 
+function renderTotpSetup(data) {
+  const setup = $("#totpSetup");
+  if (!setup) return;
+  setup.replaceChildren();
+
+  const card = document.createElement("div");
+  card.className = "totp-card";
+
+  const imageWrap = document.createElement("div");
+  imageWrap.className = "totp-qr-frame";
+  const image = document.createElement("img");
+  image.alt = "QR para configurar autenticador";
+  image.decoding = "async";
+  image.loading = "eager";
+  image.src = data.qrCode;
+  imageWrap.appendChild(image);
+
+  const content = document.createElement("div");
+  const label = document.createElement("span");
+  label.textContent = "PlacetaID creado";
+  const title = document.createElement("h3");
+  title.textContent = data.placeid || data.dip;
+  const text = document.createElement("p");
+  text.textContent = "Escanea este QR en Google Authenticator, Microsoft Authenticator, 2FAS, Authy, Aegis, Bitwarden Authenticator, 1Password o cualquier app compatible con códigos TOTP. Escribe el primer código de 6 dígitos para activar el acceso.";
+  const secret = document.createElement("div");
+  secret.className = "totp-secret";
+  secret.textContent = `Secreto manual: ${data.totpSecret}`;
+
+  content.append(label, title, text, secret);
+  card.append(imageWrap, content);
+  setup.appendChild(card);
+
+  image.addEventListener("error", () => {
+    imageWrap.classList.add("qr-load-error");
+    imageWrap.textContent = "QR no visible. Usa el secreto manual.";
+  }, { once: true });
+}
+
 async function registerInPlacetaId() {
   if (currentRegistration) return;
   const nextButton = $("#nextStep");
   nextButton.disabled = true;
   nextButton.textContent = "Creando PlacetaID...";
+  $("#totpVerifier").hidden = true;
+  $("#certificatePreview").hidden = true;
+  $("#totpSetup").innerHTML = `
+    <span>Creando PlacetaID</span>
+    <h3>Generando QR de autenticador</h3>
+    <p>Mantén esta pantalla abierta. En móvil puede tardar unos segundos si la conexión es lenta.</p>
+  `;
+  $("#totpSetup").scrollIntoView({ behavior: "smooth", block: "start" });
   const age = calculateAge($("#birthDate").value);
   const tier = tierForAge(age);
   const guardian = tier?.guardian ? guardianPayload() : null;
@@ -785,19 +831,13 @@ async function registerInPlacetaId() {
     if (!/^\d{8}[A-Z]$/.test(String(data.dip || "").trim().toUpperCase())) {
       throw new Error("PlacetaID no devolvió un DIP con formato oficial");
     }
+    if (!String(data.qrCode || "").startsWith("data:image/")) {
+      throw new Error("PlacetaID no devolvió un QR válido");
+    }
     currentRegistration = { ...body, ...data };
-    $("#totpSetup").innerHTML = `
-      <div class="totp-card">
-        <img src="${data.qrCode}" alt="QR para configurar autenticador">
-        <div>
-          <span>PlacetaID creado</span>
-          <h3>${data.placeid || data.dip}</h3>
-          <p>Escanea este QR en Google Authenticator, Microsoft Authenticator, 2FAS, Authy, Aegis, Bitwarden Authenticator, 1Password o cualquier app compatible con códigos TOTP. Escribe el primer código de 6 dígitos para activar el acceso.</p>
-          <div class="totp-secret">Secreto manual: ${data.totpSecret}</div>
-        </div>
-      </div>
-    `;
+    renderTotpSetup(data);
     $("#totpVerifier").hidden = false;
+    $("#totpSetup").scrollIntoView({ behavior: "smooth", block: "start" });
     toast("PlacetaID creado. Escanea el QR para activar 2FA.");
   } catch (error) {
     $("#totpSetup").innerHTML = `
@@ -809,7 +849,7 @@ async function registerInPlacetaId() {
     updateWizard();
   } finally {
     nextButton.disabled = false;
-    nextButton.textContent = "Imprimir certificado";
+    nextButton.textContent = wizardStep === 3 ? "Imprimir certificado" : "Continuar";
   }
 }
 
