@@ -1,10 +1,10 @@
 const organizations = [
-  { type: "publica", name: "Ayuntamiento de La Placeta", id: "PUB-AYTO", status: "Activo", text: "Gestión municipal, permisos y expedientes.", meta: ["Gobierno", "Expedientes", "Comunidad"] },
-  { type: "publica", name: "Tesoro Central", id: "TGLP-001", status: "Operativo", text: "Emisión interna, tasas y control simulado.", meta: ["Tesoro", "Normativa", "Pz"] },
-  { type: "publica", name: "Agencia Tributaria", id: "ATP-001", status: "Auditando", text: "IVA simulado, IRM y trazabilidad.", meta: ["Tributos", "IVA", "Auditoría"] },
-  { type: "empresa", name: "La Cafetería", id: "EMP-0014", status: "SDK pagos", text: "Comercio interno conectado al banco.", meta: ["Empresa", "TPV", "IVA"] },
-  { type: "empresa", name: "Placeta Studio", id: "EMP-0021", status: "Alta validada", text: "Contenidos, diseño y servicios internos.", meta: ["Servicios", "Contratos", "SMI"] },
-  { type: "asociacion", name: "Red Comunitaria Placeta", id: "ASC-0007", status: "Proyecto aprobado", text: "Actividades, ayudas y eventos.", meta: ["Voluntariado", "Eventos", "Junta"] }
+  { type: "publica", name: "Ayuntamiento de La Placeta", id: "PUB-AYTO", status: "Rol interno", text: "Órgano ficticio para permisos, expedientes y coordinación narrativa.", meta: ["Rol", "Expedientes", "Comunidad"] },
+  { type: "publica", name: "Tesoro Central", id: "TGLP-001", status: "Simulado", text: "Control interno de Pz ficticias, tasas de juego y registros educativos.", meta: ["Tesoro", "Normativa", "Pz ficticias"] },
+  { type: "publica", name: "Agencia Tributaria", id: "ATP-001", status: "Simulada", text: "Trazabilidad de impuestos ficticios y auditoría interna de rol.", meta: ["Tributos ficticios", "Auditoría", "Rol"] },
+  { type: "empresa", name: "La Cafetería", id: "EMP-0014", status: "Rol comercial", text: "Comercio ficticio para probar pedidos, recibos y flujos internos.", meta: ["Empresa de rol", "Pedidos", "Pz"] },
+  { type: "empresa", name: "Placeta Studio", id: "EMP-0021", status: "Alta de rol", text: "Entidad ficticia para contenidos, diseño y encargos internos.", meta: ["Servicios", "Encargos", "Simulación"] },
+  { type: "asociacion", name: "Red Comunitaria Placeta", id: "ASC-0007", status: "Proyecto interno", text: "Grupo de participación para actividades, voluntariado y eventos.", meta: ["Voluntariado", "Eventos", "Junta"] }
 ];
 
 const planProjects = [
@@ -12,7 +12,7 @@ const planProjects = [
     id: "infraestructura-core",
     title: "Infraestructura Core",
     tag: "Datos y APIs",
-    text: "PlacetaID, API Gateway y estado centralizado.",
+    text: "Identidad, sesiones y sincronización con criterios de privacidad.",
     status: "Primer semestre",
     budget: [
       { area: "Identidad", concept: "PlacetaID y sesiones seguras", amount: 820, status: "Prioritario" },
@@ -24,7 +24,7 @@ const planProjects = [
     id: "gobernanza-economica",
     title: "Gobernanza económica",
     tag: "Fiscalidad automática",
-    text: "IVA, tasas, IRM y alertas automáticas.",
+    text: "Reglas de Pz ficticias, límites, auditoría y alertas internas.",
     status: "En diseño",
     budget: [
       { area: "Regulación", concept: "Motor de IVA simulado e IRM", amount: 430, status: "Diseño" },
@@ -36,7 +36,7 @@ const planProjects = [
     id: "sdk-comercial",
     title: "SDK comercial",
     tag: "Pagos y webhooks",
-    text: "Checkout, enlaces de cobro y eventos.",
+    text: "Pruebas de pagos simulados, recibos y eventos internos.",
     status: "Piloto técnico",
     budget: [
       { area: "Comercio", concept: "Checkout y enlaces de cobro", amount: 520, status: "Piloto" },
@@ -48,7 +48,7 @@ const planProjects = [
     id: "mercado-regulado",
     title: "Mercado regulado",
     tag: "Inversiones +18",
-    text: "Operaciones con edad, límites y fiscalidad.",
+    text: "Operaciones simuladas con edad verificada, límites y avisos de riesgo ficticio.",
     status: "Marco normativo",
     budget: [
       { area: "Normativa", concept: "Reglas de acceso +18 y límites", amount: 240, status: "Marco" },
@@ -92,7 +92,7 @@ const defaultNews = [
     id: "empresas-internas-sdk-pagos",
     title: "Empresas internas y SDK de pagos",
     tag: "Ecosistema",
-    text: "Conexión al banco e IVA simulado.",
+    text: "Pruebas internas con banco de rol, Pz ficticias y avisos claros.",
     date: "17/05/2026",
     image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=80"
   },
