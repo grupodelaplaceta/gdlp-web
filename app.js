@@ -72,6 +72,38 @@ const planProjects = [
 
 const defaultNews = [
   {
+    id: "placeta-junior-lanzamiento",
+    title: "Placeta Junior: la app educativa para menores de 6 a 15 años",
+    tag: "Comunicado",
+    text: "Lanzamos Placeta Junior, la nueva app del ecosistema GDLP para menores. Academia gamificada con matemáticas, geografía y ciencias, monedero con Placetas ficticias y control parental total desde PlacetaID Móvil. Los tutores legales firman los documentos mediante firma manuscrita digital con validez eIDAS.",
+    date: "13/07/2026",
+    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1200&q=80"
+  },
+  {
+    id: "como-funciona-placeta-junior",
+    title: "Cómo funciona Placeta Junior: guía para tutores",
+    tag: "Ayuda",
+    text: "Guía paso a paso para dar de alta a un menor en Placeta Junior. El tutor instala la app, registra los datos del menor, firma tres documentos legales desde PlacetaID Móvil (Términos, Privacidad y Consentimiento) y configura los límites de gasto y tiempo. El menor recibe 5 Pz diarios de RBU y puede ganar más completando cuestionarios en la Academia GDLP.",
+    date: "13/07/2026",
+    image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1200&q=80"
+  },
+  {
+    id: "educacion-financiera-menores",
+    title: "Educación financiera para menores con Placetas",
+    tag: "Ecosistema",
+    text: "Placeta Junior enseña a los menores a gestionar su monedero con Placetas ficticias. Pueden ahorrar, transferir a amigos (con aprobación del tutor para importes >50 Pz) y aprender sobre impuestos: el IVA lo paga Capitalia Bank. La app incluye consejos financieros como 'Cada Placeta que ahorras es un paso hacia tu meta'.",
+    date: "13/07/2026",
+    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80"
+  },
+  {
+    id: "seguridad-control-parental",
+    title: "Seguridad y control parental en Placeta Junior",
+    tag: "Normativa",
+    text: "Los tutores legales controlan cada aspecto desde PlacetaID Móvil: límites de gasto diario y semanal, umbral de aprobación para transferencias, tiempo máximo de uso y gestión de amistades. Las solicitudes de amistad entre menores se aprueban por QR y se notifican a ambos tutores.",
+    date: "13/07/2026",
+    image: "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?auto=format&fit=crop&w=1200&q=80"
+  },
+  {
     id: "apertura-portal-institucional",
     title: "Apertura del portal institucional",
     tag: "Comunicado",
